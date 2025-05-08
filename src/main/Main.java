@@ -1,4 +1,4 @@
-package vista;
+package main;
 
 import algoritmo.Kruskal;
 import modelo.Ciudad;
