@@ -1,7 +1,6 @@
 package algoritmo;
 
 public class UnionFind {
-
 	private int[] padre;
 	private int[] rango;
 

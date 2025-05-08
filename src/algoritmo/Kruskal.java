@@ -1,6 +1,6 @@
 package algoritmo;
 
-import modelo.Conexion;
+import modelo.Sendero;
 import modelo.Mapa;
 
 import java.util.ArrayList;
@@ -9,27 +9,31 @@ import java.util.List;
 
 public class Kruskal {
 
-	public List<Conexion> obtenerArbolGeneradorMinimo(Mapa mapa) {
-		List<Conexion> arbol = new ArrayList<>();
-		List<Conexion> conexiones = mapa.obtenerConexiones().stream()
-				.sorted(Comparator.comparingDouble(Conexion::getImpactoAmbiental)).toList();
+	public List<Sendero> obtenerAGM(Mapa mapa) {
+		if (mapa.obtenerEstaciones().isEmpty()) {
+			return new ArrayList<>();
+		}
 
-		UnionFind uf = new UnionFind(mapa.obtenerCiudades().size());
+		// Copia para no modificar la lista original
+		List<Sendero> senderos = new ArrayList<>(mapa.obtenerSenderos());
+		senderos.sort(Comparator.comparingInt(Sendero::obtenerImpactoAmbiental));
 
-		for (Conexion conexion : conexiones) {
-			int origen = conexion.getOrigen().getIndice();
-			int destino = conexion.getDestino().getIndice();
+		List<Sendero> arbol = new ArrayList<>();
+		UnionFind uf = new UnionFind(mapa.obtenerEstaciones().size());
+
+		for (Sendero sendero : senderos) {
+			int origen = sendero.obtenerEstacionOrigen().obtenerId();
+			int destino = sendero.obtenerEstacionDestino().obtenerId();
 
 			if (uf.find(origen) != uf.find(destino)) {
 				uf.union(origen, destino);
-				arbol.add(conexion);
+				arbol.add(sendero);
 
-				if (arbol.size() == mapa.obtenerCiudades().size() - 1) {
-					break;
+				if (arbol.size() == mapa.obtenerEstaciones().size() - 1) {
+					break; // AGM completo
 				}
 			}
 		}
-
 		return arbol;
 	}
 }
