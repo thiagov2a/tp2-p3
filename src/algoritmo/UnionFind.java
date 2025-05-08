@@ -1,4 +1,4 @@
-package main.algoritmo;
+package algoritmo;
 
 public class UnionFind {
 

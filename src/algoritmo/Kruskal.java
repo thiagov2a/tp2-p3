@@ -1,7 +1,7 @@
-package main.algoritmo;
+package algoritmo;
 
-import main.modelo.Conexion;
-import main.modelo.Mapa;
+import modelo.Conexion;
+import modelo.Mapa;
 
 import java.util.ArrayList;
 import java.util.Comparator;

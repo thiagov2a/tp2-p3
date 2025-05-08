@@ -1,4 +1,4 @@
-package main.modelo;
+package modelo;
 
 public class Ciudad {
 
