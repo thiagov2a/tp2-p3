@@ -1,67 +1,48 @@
 package algoritmo;
 
 import modelo.Estacion;
-import modelo.Mapa;
+import modelo.Parque;
 import modelo.Sendero;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.Set;
 
 public class BFS {
 
-	private static Queue<Estacion> cola;
-	private static Set<Estacion> visitados;
-
-	public static boolean esConexo(Mapa mapa) {
+	public static boolean esConexo(Parque mapa) {
 		if (mapa == null) {
 			throw new IllegalArgumentException("El mapa no puede ser null.");
 		}
 
-		if (mapa.obtenerEstaciones().isEmpty()) {
-			return true;
+		Set<Estacion> estaciones = mapa.obtenerEstaciones();
+		if (estaciones.isEmpty()) {
+			return true; // Un grafo vacío es conexo por convención
 		}
 
-		Estacion origen = mapa.obtenerEstaciones().iterator().next();
-		Set<Estacion> alcanzables = buscarAlcanzables(mapa, origen);
+		Estacion origen = estaciones.iterator().next();
+		Set<Estacion> visitados = new HashSet<>();
 
-		return alcanzables.size() == mapa.obtenerEstaciones().size();
-	}
-
-	public static Set<Estacion> buscarAlcanzables(Mapa mapa, Estacion origen) {
-		if (!mapa.contieneEstacion(origen)) {
-			throw new IllegalArgumentException("La estación de origen no está en el mapa.");
-		}
-
-		inicializarBusqueda(origen);
+		Queue<Estacion> cola = new LinkedList<>();
+		cola.add(origen);
+		visitados.add(origen);
 
 		while (!cola.isEmpty()) {
-			Estacion actual = cola.poll(); // Selecciono y elimino
-			for (Estacion vecino : obtenerVecinosNoVisitados(mapa, actual)) {
-				visitados.add(vecino);
-				cola.offer(vecino);
+			Estacion actual = cola.poll();
+			for (Sendero s : mapa.obtenerSenderosDesde(actual)) {
+				Estacion vecino = obtenerOtroExtremo(actual, s);
+				if (!visitados.contains(vecino)) {
+					visitados.add(vecino);
+					cola.add(vecino);
+				}
 			}
 		}
-		return visitados;
+
+		return visitados.size() == estaciones.size();
 	}
 
-	private static void inicializarBusqueda(Estacion origen) {
-		cola = new LinkedList<>();
-		visitados = new HashSet<>();
-
-		cola.offer(origen);
-		visitados.add(origen);
-	}
-
-	private static List<Estacion> obtenerVecinosNoVisitados(Mapa mapa, Estacion estacion) {
-		List<Estacion> vecinos = new ArrayList<>();
-
-		for (Sendero sendero : mapa.obtenerSenderosDesde(estacion)) {
-			Estacion vecino = sendero.obtenerEstacionOrigen().equals(estacion) ? sendero.obtenerEstacionDestino()
-					: sendero.obtenerEstacionOrigen();
-
-			if (!visitados.contains(vecino)) {
-				vecinos.add(vecino);
-			}
-		}
-		return vecinos;
+	private static Estacion obtenerOtroExtremo(Estacion actual, Sendero s) {
+		return s.obtenerEstacionOrigen().equals(actual) ? s.obtenerEstacionDestino() : s.obtenerEstacionOrigen();
 	}
 }

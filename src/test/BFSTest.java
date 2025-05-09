@@ -4,7 +4,7 @@ import org.junit.Test;
 
 import algoritmo.BFS;
 import modelo.Estacion;
-import modelo.Mapa;
+import modelo.Parque;
 
 import static org.junit.Assert.*;
 
@@ -12,19 +12,19 @@ public class BFSTest {
 
 	@Test
 	public void testMapaVacio() {
-		Mapa mapa = new Mapa();
+		Parque mapa = new Parque("Parque Nacional 0");
 		assertTrue(BFS.esConexo(mapa));
 	}
 
 	@Test
 	public void testMapaConexo() {
-		Mapa mapa = crearMapaConexo();
+		Parque mapa = crearMapaConexo();
 		assertTrue(BFS.esConexo(mapa));
 	}
 
 	@Test
 	public void testMapaNoConexo() {
-		Mapa mapa = crearMapaNoConexo();
+		Parque mapa = crearMapaNoConexo();
 		assertFalse(BFS.esConexo(mapa));
 	}
 
@@ -33,8 +33,8 @@ public class BFSTest {
 		BFS.esConexo(null);
 	}
 
-	private Mapa crearMapaConexo() {
-		Mapa mapa = new Mapa();
+	private Parque crearMapaConexo() {
+		Parque mapa = new Parque("Parque Nacional 1");
 		Estacion a = new Estacion(0, "Estacion A", 0, 0);
 		Estacion b = new Estacion(1, "Estacion B", 1, 1);
 
@@ -45,8 +45,8 @@ public class BFSTest {
 		return mapa;
 	}
 
-	private Mapa crearMapaNoConexo() {
-		Mapa mapa = new Mapa();
+	private Parque crearMapaNoConexo() {
+		Parque mapa = new Parque("Parque Nacional 2");
 		Estacion a = new Estacion(0, "Estacion A", 0, 0);
 		Estacion b = new Estacion(1, "Estacion B", 1, 1);
 

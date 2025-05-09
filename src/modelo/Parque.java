@@ -10,16 +10,18 @@ import java.util.Set;
 
 import algoritmo.BFS;
 
-public class Mapa {
+public class Parque {
 
+	private String nombre;
 	private final Set<Estacion> estaciones;
 	private final List<Sendero> senderos;
 	private final Map<Estacion, Set<Sendero>> mapaAdyacencia;
 
-	public Mapa() {
-		estaciones = new HashSet<>();
-		senderos = new ArrayList<>();
-		mapaAdyacencia = new HashMap<>();
+	public Parque(String nombre) {
+		this.nombre = nombre;
+		this.estaciones = new HashSet<>();
+		this.senderos = new ArrayList<>();
+		this.mapaAdyacencia = new HashMap<>();
 	}
 
 	public void agregarEstacion(Estacion estacion) {
@@ -88,5 +90,10 @@ public class Mapa {
 
 	public boolean esConexo() {
 		return BFS.esConexo(this);
+	}
+
+	@Override
+	public String toString() {
+		return this.nombre;
 	}
 }

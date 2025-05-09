@@ -1,7 +1,7 @@
 package algoritmo;
 
 import modelo.Sendero;
-import modelo.Mapa;
+import modelo.Parque;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -9,7 +9,8 @@ import java.util.List;
 
 public class Kruskal {
 
-	public List<Sendero> obtenerAGM(Mapa mapa) {
+	// TODO: Agregar tiempo de ejecución del algoritmo
+	public List<Sendero> obtenerAGM(Parque mapa) {
 		if (mapa.obtenerEstaciones().isEmpty()) {
 			return new ArrayList<>();
 		}

@@ -4,14 +4,14 @@ public class Estacion {
 
 	private final int id;
 	private String nombre;
-	private double coordenadaX;
-	private double coordenadaY;
+	private double longitud;
+	private double latitud;
 
-	public Estacion(int id, String nombre, double x, double y) {
+	public Estacion(int id, String nombre, double longitud, double latitud) {
 		this.id = id;
 		this.nombre = nombre;
-		this.coordenadaX = x;
-		this.coordenadaY = y;
+		this.longitud = longitud;
+		this.latitud = latitud;
 	}
 
 	public int obtenerId() {
@@ -22,12 +22,12 @@ public class Estacion {
 		return nombre;
 	}
 
-	public double obtenerCoordenadaX() {
-		return coordenadaX;
+	public double obtenerLongitud() {
+		return longitud;
 	}
 
-	public double obtenerCoordenadaY() {
-		return coordenadaY;
+	public double obtenerLatitud() {
+		return latitud;
 	}
 
 	@Override
