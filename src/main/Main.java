@@ -61,6 +61,7 @@ public class Main {
 			System.out.println("\n[Algoritmo de Kruskal]");
 		} else {
 			// Calcular AGM con Prim
+			scanner.close();
 			return;
 		}
 
@@ -83,5 +84,7 @@ public class Main {
 		System.out.println("Estaciones: " + parqueNacional.obtenerEstaciones().size());
 		System.out.println("Senderos posibles: " + parqueNacional.obtenerSenderos().size());
 		System.out.println("Senderos en AGM: " + senderosOptimos.size());
+
+		scanner.close();
 	}
 }
