@@ -4,14 +4,14 @@ public class Estacion {
 
 	private final int id;
 	private String nombre;
-	private double longitud;
 	private double latitud;
+	private double longitud;
 
-	public Estacion(int id, String nombre, double longitud, double latitud) {
+	public Estacion(int id, String nombre, double latitud, double longitud) {
 		this.id = id;
 		this.nombre = nombre;
-		this.longitud = longitud;
 		this.latitud = latitud;
+		this.longitud = longitud;
 	}
 
 	public int obtenerId() {
@@ -22,12 +22,12 @@ public class Estacion {
 		return nombre;
 	}
 
-	public double obtenerLongitud() {
-		return longitud;
-	}
-
 	public double obtenerLatitud() {
 		return latitud;
+	}
+
+	public double obtenerLongitud() {
+		return longitud;
 	}
 
 	@Override

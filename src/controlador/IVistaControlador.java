@@ -14,4 +14,8 @@ public interface IVistaControlador {
 	public String obtenerNombreEstacion(int id);
 
 	public List<Sendero> obtenerSenderos();
+
+	public List<Sendero> obtenerAGM();
+
+	public boolean verificarConectividad();
 }

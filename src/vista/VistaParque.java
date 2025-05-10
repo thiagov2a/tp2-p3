@@ -1,9 +1,12 @@
 package vista;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.util.List;
 import java.util.Map;
 
+import javax.swing.JButton;
+import javax.swing.JOptionPane;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
@@ -33,21 +36,42 @@ public class VistaParque {
 	}
 
 	private void initialize() {
-		frame = new JFrame();
-		frame.setBounds(100, 100, 800, 600);
+		frame = new JFrame("Parque Nacional");
+		frame.setSize(800, 600);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.getContentPane().setLayout(null);
+		frame.setLocationRelativeTo(null); // Centra la ventana
+		frame.getContentPane().setLayout(new BorderLayout());
 
-		panelMapa = new JPanel();
-		panelMapa.setBounds(10, 11, 764, 540);
-		frame.getContentPane().add(panelMapa);
-		panelMapa.setLayout(null);
-
+		// Panel con el mapa
 		mapa = new JMapViewer();
-		mapa.setBounds(0, 0, 764, 540);
 		mapa.setZoomContolsVisible(true);
 		mapa.setDisplayPosition(new Coordinate(-27.615, -67.825), 13);
-		panelMapa.add(mapa);
+
+		panelMapa = new JPanel(new BorderLayout());
+		panelMapa.add(mapa, BorderLayout.CENTER);
+
+		frame.getContentPane().add(panelMapa, BorderLayout.CENTER);
+
+		// Panel inferior con botones
+		JPanel panelBotones = new JPanel();
+
+		JButton btnConectividad = new JButton("Verificar conexión");
+		btnConectividad.addActionListener(e -> {
+			boolean conexo = controlador.verificarConectividad();
+			String mensaje = conexo ? "El parque es conexo." : "El parque NO es conexo.";
+			JOptionPane.showMessageDialog(frame, mensaje);
+		});
+
+		JButton btnAGM = new JButton("Mostrar AGM");
+		btnAGM.addActionListener(e -> {
+			List<Sendero> agm = controlador.obtenerAGM();
+			dibujarSenderosDestacados(agm, Color.BLUE);
+		});
+
+		panelBotones.add(btnConectividad);
+		panelBotones.add(btnAGM);
+
+		frame.getContentPane().add(panelBotones, BorderLayout.SOUTH);
 	}
 
 	private void mostrarEstacionesYSenderos() {
@@ -64,6 +88,19 @@ public class VistaParque {
 
 			MapPolygonImpl linea = new MapPolygonImpl(List.of(c1, c2, c1));
 			linea.setColor(colorPorImpacto(s.obtenerImpactoAmbiental()));
+			mapa.addMapPolygon(linea);
+		}
+	}
+
+	private void dibujarSenderosDestacados(List<Sendero> senderos, Color color) {
+		Map<Integer, Coordinate> mapaEstaciones = controlador.obtenerCoordenadasEstaciones();
+
+		for (Sendero s : senderos) {
+			Coordinate c1 = mapaEstaciones.get(s.obtenerEstacionOrigen().obtenerId());
+			Coordinate c2 = mapaEstaciones.get(s.obtenerEstacionDestino().obtenerId());
+
+			MapPolygonImpl linea = new MapPolygonImpl(List.of(c1, c2, c1));
+			linea.setColor(color);
 			mapa.addMapPolygon(linea);
 		}
 	}

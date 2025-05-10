@@ -10,7 +10,7 @@ import java.util.List;
 public class Kruskal {
 
 	// TODO: Agregar tiempo de ejecución del algoritmo
-	public List<Sendero> obtenerAGM(Parque mapa) {
+	public static List<Sendero> obtenerAGM(Parque mapa) {
 		if (mapa.obtenerEstaciones().isEmpty()) {
 			return new ArrayList<>();
 		}

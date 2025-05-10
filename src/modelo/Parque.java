@@ -38,8 +38,7 @@ public class Parque {
 
 		Sendero nuevoSendero = new Sendero(origen, destino, impacto);
 
-		// Verificar si ya existe esta conexión
-		if (senderos.stream().anyMatch(s -> s.equals(nuevoSendero))) {
+		if (existeConexion(nuevoSendero)) {
 			throw new IllegalArgumentException(
 					"Ya existe un sendero entre " + origen.obtenerNombre() + " y " + destino.obtenerNombre());
 		}
@@ -47,6 +46,10 @@ public class Parque {
 		senderos.add(nuevoSendero);
 		mapaAdyacencia.get(origen).add(nuevoSendero);
 		mapaAdyacencia.get(destino).add(nuevoSendero);
+	}
+
+	private boolean existeConexion(Sendero nuevoSendero) {
+		return senderos.stream().anyMatch(s -> s.equals(nuevoSendero));
 	}
 
 	public boolean contieneEstacion(Estacion estacion) {
