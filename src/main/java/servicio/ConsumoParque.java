@@ -21,7 +21,10 @@ public class ConsumoParque {
 
 			// Crear el parque
 			String nombreParque = json.get("nombre").getAsString();
-			parque = new Parque(nombreParque);
+			double centroLatitud = json.get("centroLatitud").getAsDouble();
+			double centroLongitud = json.get("centroLongitud").getAsDouble();
+			int zoomInicial = json.get("zoomInicial").getAsInt();
+			parque = new Parque(nombreParque, centroLatitud, centroLongitud, zoomInicial);
 
 			// Parsear estaciones
 			JsonArray estacionesJson = json.getAsJsonArray("estaciones");

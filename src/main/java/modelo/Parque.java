@@ -13,12 +13,18 @@ import java.util.Set;
 public class Parque {
 
 	private String nombre;
+	private double centroLatitud;
+	private double centroLongitud;
+	private int zoomInicial;
 	private final Set<Estacion> estaciones;
 	private final List<Sendero> senderos;
 	private final Map<Estacion, Set<Sendero>> mapaAdyacencia;
 
-	public Parque(String nombre) {
+	public Parque(String nombre, double centroLatitud, double centroLongitud, int zoomInicial) {
 		this.nombre = nombre;
+		this.centroLatitud = centroLatitud;
+		this.centroLongitud = centroLongitud;
+		this.zoomInicial = zoomInicial;
 		this.estaciones = new HashSet<>();
 		this.senderos = new ArrayList<>();
 		this.mapaAdyacencia = new HashMap<>();
@@ -77,6 +83,18 @@ public class Parque {
 
 		mapaAdyacencia.get(sendero.obtenerEstacionOrigen()).remove(sendero);
 		mapaAdyacencia.get(sendero.obtenerEstacionDestino()).remove(sendero);
+	}
+	
+	public double obtenerCentroLatitud() {
+	    return centroLatitud;
+	}
+
+	public double obtenerCentroLongitud() {
+	    return centroLongitud;
+	}
+
+	public int obtenerZoomInicial() {
+	    return zoomInicial;
 	}
 
 	public Set<Estacion> obtenerEstaciones() {

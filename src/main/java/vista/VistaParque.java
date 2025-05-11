@@ -25,9 +25,9 @@ public class VistaParque {
 	private JPanel panelMapa;
 	private IVistaControlador controlador;
 
-	public VistaParque(IVistaControlador controlador) {
+	public VistaParque(IVistaControlador controlador, Coordinate centroParque, int zoomInicial) {
 		this.controlador = controlador;
-		initialize();
+		inicializar(centroParque, zoomInicial);
 	}
 
 	public void mostrar() {
@@ -35,7 +35,7 @@ public class VistaParque {
 		mostrarEstacionesYSenderos();
 	}
 
-	private void initialize() {
+	private void inicializar(Coordinate centroParque, int zoomInicial) {
 		frame = new JFrame("Parque Nacional");
 		frame.setSize(800, 600);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -45,7 +45,7 @@ public class VistaParque {
 		// Panel con el mapa
 		mapa = new JMapViewer();
 		mapa.setZoomControlsVisible(false);
-		mapa.setDisplayPosition(new Coordinate(-27.615, -67.825), 13);
+		mapa.setDisplayPosition(centroParque, zoomInicial);
 
 		panelMapa = new JPanel(new BorderLayout());
 		panelMapa.add(mapa, BorderLayout.CENTER);

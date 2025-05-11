@@ -12,9 +12,9 @@
   ],
   "senderos": [
     { "origen": 0, "destino": 1, "impacto": 3 },
-    { "origen": 1, "destino": 2, "impacto": 2 },
-    { "origen": 2, "destino": 3, "impacto": 7 },
-    { "origen": 3, "destino": 4, "impacto": 9 },
-    { "origen": 0, "destino": 4, "impacto": 6 }
+    { "origen": 1, "destino": 2, "impacto": 4 },
+    { "origen": 2, "destino": 4, "impacto": 5 },
+    { "origen": 3, "destino": 0, "impacto": 2 },
+    { "origen": 3, "destino": 4, "impacto": 6 }
   ]
 }

@@ -15,11 +15,15 @@ import java.util.Map;
 public class ControladorParque implements IVistaControlador {
 
 	private Parque parque;
+	private Coordinate centroParque;
+	private int zoomInicial;
 	private VistaParque vista;
 
 	public ControladorParque(String rutaJson) {
 		this.parque = ConsumoParque.cargarParqueDesdeJson(rutaJson); // Ruta del archivo JSON
-		this.vista = new VistaParque(this);
+		this.centroParque = new Coordinate(parque.obtenerCentroLatitud(), parque.obtenerCentroLongitud());
+		this.zoomInicial = parque.obtenerZoomInicial();
+		this.vista = new VistaParque(this, centroParque, zoomInicial);
 	}
 
 	public boolean verificarConectividad() {
