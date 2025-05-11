@@ -35,4 +35,8 @@ public class UnionFind {
 			}
 		}
 	}
+	public boolean conectados(int p, int q) {
+	    return find(p) == find(q);
+	}
+
 }
