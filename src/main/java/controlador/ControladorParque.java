@@ -15,27 +15,9 @@ import java.util.Map;
 public class ControladorParque implements IVistaControlador {
 
 	private Parque parque;
-	private Coordinate centroParque;
-	private int zoomInicial;
-	private VistaParque vista;
 
 	public ControladorParque(String rutaJson) {
-		this.parque = ConsumoParque.cargarParqueDesdeJson(rutaJson); // Ruta del archivo JSON
-		this.centroParque = new Coordinate(parque.obtenerCentroLatitud(), parque.obtenerCentroLongitud());
-		this.zoomInicial = parque.obtenerZoomInicial();
-		this.vista = new VistaParque(this, centroParque, zoomInicial);
-	}
-
-	public boolean verificarConectividad() {
-		return parque.esConexo();
-	}
-
-	public List<Sendero> obtenerAGM() {
-		return Kruskal.obtenerAGM(parque);
-	}
-
-	public void iniciarAplicacion() {
-		vista.mostrar();
+		this.parque = ConsumoParque.cargarParqueDesdeJson(rutaJson);
 	}
 
 	@Override
@@ -49,12 +31,32 @@ public class ControladorParque implements IVistaControlador {
 
 	@Override
 	public String obtenerNombreEstacion(int id) {
-		return parque.obtenerEstaciones().stream().filter(e -> e.obtenerId() == id).map(e -> e.obtenerNombre())
-				.findFirst().orElse("Desconocido");
+		return parque.obtenerEstaciones()
+				.stream()
+				.filter(e -> e.obtenerId() == id)
+				.map(Estacion::obtenerNombre)
+				.findFirst()
+				.orElse("Desconocido");
 	}
 
 	@Override
 	public List<Sendero> obtenerSenderos() {
 		return parque.obtenerSenderos();
+	}
+
+	public boolean verificarConectividad() {
+		return parque.esConexo();
+	}
+
+	public List<Sendero> obtenerAGM() {
+		return Kruskal.obtenerAGM(parque);
+	}
+
+	public Coordinate obtenerCentroParque() {
+		return new Coordinate(parque.obtenerCentroLatitud(), parque.obtenerCentroLongitud());
+	}
+
+	public int obtenerZoomInicial() {
+		return parque.obtenerZoomInicial();
 	}
 }

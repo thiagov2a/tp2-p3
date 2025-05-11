@@ -84,17 +84,17 @@ public class Parque {
 		mapaAdyacencia.get(sendero.obtenerEstacionOrigen()).remove(sendero);
 		mapaAdyacencia.get(sendero.obtenerEstacionDestino()).remove(sendero);
 	}
-	
+
 	public double obtenerCentroLatitud() {
-	    return centroLatitud;
+		return centroLatitud;
 	}
 
 	public double obtenerCentroLongitud() {
-	    return centroLongitud;
+		return centroLongitud;
 	}
 
 	public int obtenerZoomInicial() {
-	    return zoomInicial;
+		return zoomInicial;
 	}
 
 	public Set<Estacion> obtenerEstaciones() {

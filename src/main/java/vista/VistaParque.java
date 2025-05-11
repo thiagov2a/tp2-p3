@@ -1,6 +1,6 @@
 package main.java.vista;
 
-import main.java.controlador.IVistaControlador;
+import main.java.controlador.ControladorParque;
 import main.java.modelo.Sendero;
 
 import java.awt.BorderLayout;
@@ -23,36 +23,54 @@ public class VistaParque {
 	private JFrame frame;
 	private JMapViewer mapa;
 	private JPanel panelMapa;
-	private IVistaControlador controlador;
+	private ControladorParque controlador;
 
-	public VistaParque(IVistaControlador controlador, Coordinate centroParque, int zoomInicial) {
-		this.controlador = controlador;
-		inicializar(centroParque, zoomInicial);
+	public VistaParque() {
+		// Acá pedimos la selección del parque
+		String[] opciones = { "Parque El Palmar", "Parque Glaciares", "Parque Iguazú", "Parque Talampaya" };
+		String seleccion = (String) JOptionPane.showInputDialog(null, "Selecciona un parque", "Inicio",
+				JOptionPane.QUESTION_MESSAGE, null, opciones, opciones[0]);
+
+		if (seleccion == null) {
+			System.exit(0);
+		}
+
+		String rutaJson = switch (seleccion) {
+		case "Parque El Palmar" -> "src/main/recursos/parque_el_palmar.json";
+		case "Parque Glaciares" -> "src/main/recursos/parque_glaciares.json";
+		case "Parque Iguazú" -> "src/main/recursos/parque_iguazu.json";
+		default -> "src/main/recursos/parque_talampaya.json";
+		};
+
+		// Creamos el controlador con la ruta elegida
+		ControladorParque ctrl = new ControladorParque(rutaJson);
+		this.controlador = ctrl;
 	}
 
 	public void mostrar() {
+		inicializar();
 		frame.setVisible(true);
 		mostrarEstacionesYSenderos();
 	}
 
-	private void inicializar(Coordinate centroParque, int zoomInicial) {
+	private void inicializar() {
+		Coordinate centroParque = controlador.obtenerCentroParque();
+		int zoomInicial = controlador.obtenerZoomInicial();
+
 		frame = new JFrame("Parque Nacional");
 		frame.setSize(800, 600);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setLocationRelativeTo(null); // Centra la ventana
+		frame.setLocationRelativeTo(null);
 		frame.getContentPane().setLayout(new BorderLayout());
 
-		// Panel con el mapa
 		mapa = new JMapViewer();
 		mapa.setZoomControlsVisible(false);
 		mapa.setDisplayPosition(centroParque, zoomInicial);
 
 		panelMapa = new JPanel(new BorderLayout());
 		panelMapa.add(mapa, BorderLayout.CENTER);
-
 		frame.getContentPane().add(panelMapa, BorderLayout.CENTER);
 
-		// Panel inferior con botones
 		JPanel panelBotones = new JPanel();
 
 		JButton btnConectividad = new JButton("Verificar conexión");
@@ -72,7 +90,6 @@ public class VistaParque {
 
 		panelBotones.add(btnConectividad);
 		panelBotones.add(btnAGM);
-
 		frame.getContentPane().add(panelBotones, BorderLayout.SOUTH);
 	}
 
@@ -88,33 +105,20 @@ public class VistaParque {
 			Coordinate c1 = mapaEstaciones.get(s.obtenerEstacionOrigen().obtenerId());
 			Coordinate c2 = mapaEstaciones.get(s.obtenerEstacionDestino().obtenerId());
 
-			// Crear la línea del sendero
 			MapPolygonImpl linea = new MapPolygonImpl(List.of(c1, c2, c1));
 			Color colorImpacto = colorPorImpacto(s.obtenerImpactoAmbiental());
 			linea.setColor(colorImpacto);
-
-			// Añadir la línea al mapa
 			mapa.addMapPolygon(linea);
-
-			/*
-			 * // Crear un marcador de texto con el impacto ambiental String impactoTexto =
-			 * "Impacto: " + s.obtenerImpactoAmbiental(); // Ubicación media del sendero
-			 * Coordinate medio = new Coordinate((c1.getLat() + c2.getLat()) / 2,
-			 * (c1.getLon() + c2.getLon()) / 2); MapMarkerDot marcadorImpacto = new
-			 * MapMarkerDot(impactoTexto, medio); marcadorImpacto.setColor(colorImpacto);
-			 * mapa.addMapMarker(marcadorImpacto);
-			 */
 		}
 	}
 
 	private Color colorPorImpacto(int impacto) {
-		if (impacto <= 3) {
-			return Color.GREEN; // Bajo impacto
-		} else if (impacto <= 6) {
-			return Color.YELLOW; // Impacto intermedio
-		} else {
-			return Color.RED; // Alto impacto
-		}
+		if (impacto <= 3)
+			return Color.GREEN;
+		else if (impacto <= 6)
+			return Color.YELLOW;
+		else
+			return Color.RED;
 	}
 
 	private void dibujarSenderosDestacados(List<Sendero> senderos, Color color) {
@@ -131,10 +135,6 @@ public class VistaParque {
 	}
 
 	private int calcularImpactoTotal(List<Sendero> senderosAGM) {
-		int impactoTotal = 0;
-		for (Sendero sendero : senderosAGM) {
-			impactoTotal += sendero.obtenerImpactoAmbiental();
-		}
-		return impactoTotal;
+		return senderosAGM.stream().mapToInt(Sendero::obtenerImpactoAmbiental).sum();
 	}
 }
