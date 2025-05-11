@@ -32,20 +32,20 @@ public class ParqueTest {
 	}
 
 	@Test
+	void testAgregarSendero() {
+		parque.agregarEstacion(estacion1);
+		parque.agregarEstacion(estacion2);
+		parque.agregarSendero(estacion1, estacion2, 5);
+	}
+	
+	@Test
 	void testAgregarEstacionDuplicada() {
 		parque.agregarEstacion(estacion1);
 		assertThrows(IllegalArgumentException.class, () -> parque.agregarEstacion(estacion1));
 	}
 
 	@Test
-	void testAgregarSendero() {
-		parque.agregarEstacion(estacion1);
-		parque.agregarEstacion(estacion2);
-		parque.agregarSendero(estacion1, estacion2, 5);
-	}
-
-	@Test
-	void testAgregarSenderoRepetido() {
+	void testAgregarSenderoDuplicado() {
 		parque.agregarEstacion(estacion1);
 		parque.agregarEstacion(estacion2);
 		parque.agregarSendero(estacion1, estacion2, 5);
