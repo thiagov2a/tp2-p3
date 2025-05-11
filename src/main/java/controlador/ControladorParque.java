@@ -17,8 +17,8 @@ public class ControladorParque implements IVistaControlador {
 	private Parque parque;
 	private VistaParque vista;
 
-	public ControladorParque() {
-		this.parque = ConsumoParque.cargarParqueDesdeJson("src/main/recursos/parque.json"); // Ruta del archivo JSON
+	public ControladorParque(String rutaJson) {
+		this.parque = ConsumoParque.cargarParqueDesdeJson(rutaJson); // Ruta del archivo JSON
 		this.vista = new VistaParque(this);
 	}
 
@@ -34,7 +34,6 @@ public class ControladorParque implements IVistaControlador {
 		vista.mostrar();
 	}
 
-	// Implementación de la interfaz
 	@Override
 	public Map<Integer, Coordinate> obtenerCoordenadasEstaciones() {
 		Map<Integer, Coordinate> coords = new HashMap<>();

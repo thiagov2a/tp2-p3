@@ -1,0 +1,17 @@
+{
+  "nombre": "Parque Nacional El Palmar",
+  "estaciones": [
+    { "id": 0, "nombre": "Centro de Visitantes", "latitud": -31.850, "longitud": -58.320 },
+    { "id": 1, "nombre": "Sendero de los Palmares", "latitud": -31.855, "longitud": -58.325 },
+    { "id": 2, "nombre": "Mirador del Río", "latitud": -31.860, "longitud": -58.330 },
+    { "id": 3, "nombre": "Estación del Bosque", "latitud": -31.865, "longitud": -58.315 },
+    { "id": 4, "nombre": "Refugio de Aves", "latitud": -31.870, "longitud": -58.310 }
+  ],
+  "senderos": [
+    { "origen": 0, "destino": 1, "impacto": 3 },
+    { "origen": 1, "destino": 2, "impacto": 4 },
+    { "origen": 2, "destino": 4, "impacto": 5 },
+    { "origen": 3, "destino": 0, "impacto": 2 },
+    { "origen": 3, "destino": 4, "impacto": 6 }
+  ]
+}

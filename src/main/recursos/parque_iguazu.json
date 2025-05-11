@@ -1,0 +1,17 @@
+{
+  "nombre": "Parque Nacional Iguazú",
+  "estaciones": [
+    { "id": 0, "nombre": "Centro de Visitantes", "latitud": -25.685, "longitud": -54.436 },
+    { "id": 1, "nombre": "Sendero Macuco", "latitud": -25.687, "longitud": -54.432 },
+    { "id": 2, "nombre": "Garganta del Diablo", "latitud": -25.695, "longitud": -54.436 },
+    { "id": 3, "nombre": "Estación Cataratas", "latitud": -25.690, "longitud": -54.435 },
+    { "id": 4, "nombre": "Mirador Superior", "latitud": -25.693, "longitud": -54.438 }
+  ],
+  "senderos": [
+    { "origen": 0, "destino": 1, "impacto": 2 },
+    { "origen": 1, "destino": 2, "impacto": 5 },
+    { "origen": 2, "destino": 4, "impacto": 3 },
+    { "origen": 3, "destino": 0, "impacto": 4 },
+    { "origen": 3, "destino": 4, "impacto": 6 }
+  ]
+}

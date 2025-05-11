@@ -12,7 +12,7 @@ public class BFSTest {
 
 	@Test
 	public void testMapaVacio() {
-		Parque mapa = new Parque("Parque Nacional 0");
+		Parque mapa = new Parque("Parque Nacional");
 		assertTrue(BFS.esConexo(mapa));
 	}
 
@@ -34,7 +34,7 @@ public class BFSTest {
 	}
 
 	private Parque crearMapaConexo() {
-		Parque mapa = new Parque("Parque Nacional 1");
+		Parque mapa = new Parque("Parque Nacional");
 		Estacion a = new Estacion(0, "Estacion A", 0, 0);
 		Estacion b = new Estacion(1, "Estacion B", 1, 1);
 
@@ -46,7 +46,7 @@ public class BFSTest {
 	}
 
 	private Parque crearMapaNoConexo() {
-		Parque mapa = new Parque("Parque Nacional 2");
+		Parque mapa = new Parque("Parque Nacional");
 		Estacion a = new Estacion(0, "Estacion A", 0, 0);
 		Estacion b = new Estacion(1, "Estacion B", 1, 1);
 

@@ -1,0 +1,17 @@
+{
+  "nombre": "Parque Nacional Los Glaciares",
+  "estaciones": [
+    { "id": 0, "nombre": "Centro de Visitantes", "latitud": -50.495, "longitud": -73.050 },
+    { "id": 1, "nombre": "Mirador del Glaciar", "latitud": -50.497, "longitud": -73.045 },
+    { "id": 2, "nombre": "Sendero Bosque", "latitud": -50.499, "longitud": -73.040 },
+    { "id": 3, "nombre": "Estación Lago", "latitud": -50.500, "longitud": -73.055 },
+    { "id": 4, "nombre": "Refugio de Montaña", "latitud": -50.502, "longitud": -73.060 }
+  ],
+  "senderos": [
+    { "origen": 0, "destino": 1, "impacto": 3 },
+    { "origen": 1, "destino": 2, "impacto": 4 },
+    { "origen": 2, "destino": 4, "impacto": 5 },
+    { "origen": 3, "destino": 0, "impacto": 2 },
+    { "origen": 3, "destino": 4, "impacto": 6 }
+  ]
+}
