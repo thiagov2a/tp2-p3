@@ -44,7 +44,7 @@ public class VistaParque {
 
 		// Panel con el mapa
 		mapa = new JMapViewer();
-		mapa.setZoomContolsVisible(true);
+		mapa.setZoomControlsVisible(false);
 		mapa.setDisplayPosition(new Coordinate(-27.615, -67.825), 13);
 
 		panelMapa = new JPanel(new BorderLayout());
@@ -65,7 +65,9 @@ public class VistaParque {
 		JButton btnAGM = new JButton("Mostrar AGM");
 		btnAGM.addActionListener(e -> {
 			List<Sendero> agm = controlador.obtenerAGM();
+			int impactoTotal = calcularImpactoTotal(agm);
 			dibujarSenderosDestacados(agm, Color.BLUE);
+			JOptionPane.showMessageDialog(frame, "Impacto ambiental total: " + impactoTotal);
 		});
 
 		panelBotones.add(btnConectividad);
@@ -86,9 +88,32 @@ public class VistaParque {
 			Coordinate c1 = mapaEstaciones.get(s.obtenerEstacionOrigen().obtenerId());
 			Coordinate c2 = mapaEstaciones.get(s.obtenerEstacionDestino().obtenerId());
 
+			// Crear la línea del sendero
 			MapPolygonImpl linea = new MapPolygonImpl(List.of(c1, c2, c1));
-			linea.setColor(colorPorImpacto(s.obtenerImpactoAmbiental()));
+			Color colorImpacto = colorPorImpacto(s.obtenerImpactoAmbiental());
+			linea.setColor(colorImpacto);
+
+			// Añadir la línea al mapa
 			mapa.addMapPolygon(linea);
+
+			/*
+			 * // Crear un marcador de texto con el impacto ambiental String impactoTexto =
+			 * "Impacto: " + s.obtenerImpactoAmbiental(); // Ubicación media del sendero
+			 * Coordinate medio = new Coordinate((c1.getLat() + c2.getLat()) / 2,
+			 * (c1.getLon() + c2.getLon()) / 2); MapMarkerDot marcadorImpacto = new
+			 * MapMarkerDot(impactoTexto, medio); marcadorImpacto.setColor(colorImpacto);
+			 * mapa.addMapMarker(marcadorImpacto);
+			 */
+		}
+	}
+
+	private Color colorPorImpacto(int impacto) {
+		if (impacto <= 3) {
+			return Color.GREEN; // Bajo impacto
+		} else if (impacto <= 6) {
+			return Color.YELLOW; // Impacto intermedio
+		} else {
+			return Color.RED; // Alto impacto
 		}
 	}
 
@@ -105,11 +130,11 @@ public class VistaParque {
 		}
 	}
 
-	private Color colorPorImpacto(int impacto) {
-		if (impacto <= 3)
-			return Color.GREEN;
-		if (impacto <= 6)
-			return Color.ORANGE;
-		return Color.RED;
+	private int calcularImpactoTotal(List<Sendero> senderosAGM) {
+		int impactoTotal = 0;
+		for (Sendero sendero : senderosAGM) {
+			impactoTotal += sendero.obtenerImpactoAmbiental();
+		}
+		return impactoTotal;
 	}
 }

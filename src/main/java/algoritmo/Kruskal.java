@@ -9,11 +9,14 @@ import java.util.List;
 
 public class Kruskal {
 
-	// TODO: Agregar tiempo de ejecución del algoritmo
+	private static double tiempoEjecucion;
+
 	public static List<Sendero> obtenerAGM(Parque mapa) {
 		if (mapa.obtenerEstaciones().isEmpty()) {
 			return new ArrayList<>();
 		}
+
+		long tiempoInicio = System.nanoTime();
 
 		// Copia para no modificar la lista original
 		List<Sendero> senderos = new ArrayList<>(mapa.obtenerSenderos());
@@ -35,6 +38,13 @@ public class Kruskal {
 				}
 			}
 		}
+
+		tiempoEjecucion = System.nanoTime() - tiempoInicio;
+
 		return arbol;
+	}
+
+	public double obtenerTiempoEjecucion() {
+		return tiempoEjecucion;
 	}
 }

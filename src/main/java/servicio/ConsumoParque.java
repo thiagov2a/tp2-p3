@@ -7,7 +7,6 @@ import java.io.FileReader;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -15,7 +14,6 @@ import com.google.gson.JsonParser;
 public class ConsumoParque {
 
 	public static Parque cargarParqueDesdeJson(String rutaArchivo) {
-		Gson gson = new Gson();
 		Parque parque;
 
 		try (FileReader reader = new FileReader(rutaArchivo)) {
