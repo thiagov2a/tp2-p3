@@ -17,8 +17,8 @@ public class ParqueTest {
 
 	@BeforeEach
 	public void inicializarVariables() {
-		parque = new Parque("Parque Nacional", -34.5, -58.4, 10);
-		estacion1 = new Estacion(1, "Estacion A", -34.51, -58.41);
+		parque = new Parque("Parque Nacional", -34.1, -58.4, 10);
+		estacion1 = new Estacion(1, "Estacion A", -54.51, -48.11);
 		estacion2 = new Estacion(2, "Estacion B", -74.12, -38.92);
 		estacion3 = new Estacion(3, "Estacion C", -4.83, -84.32);
 	}

@@ -4,7 +4,6 @@ import main.java.algoritmo.Kruskal;
 import main.java.modelo.Estacion;
 import main.java.modelo.Parque;
 import main.java.modelo.Sendero;
-import main.java.vista.VistaParque;
 import main.java.servicio.ConsumoParque;
 import org.openstreetmap.gui.jmapviewer.Coordinate;
 
