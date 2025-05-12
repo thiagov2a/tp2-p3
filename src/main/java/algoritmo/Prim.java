@@ -9,62 +9,64 @@ import main.java.modelo.Parque;
 import main.java.modelo.Sendero;
 
 public class Prim {
-    private Parque parque;
-    private Set<Estacion> estacionesVisitadas;
-    private Set<Sendero> senderosVisitados;
-    private static double tiempoEjecucion;
 
-    public Prim(Parque parque) {
-        this.parque = parque;
-        this.estacionesVisitadas = new HashSet<>();
-        this.senderosVisitados = new HashSet<>();
-    }
+	private Parque parque;
+	private Set<Estacion> estacionesVisitadas;
+	private Set<Sendero> senderosVisitados;
+	private static double tiempoEjecucion;
 
-    public void ejecutarPrim(Estacion estacionInicial) {
-        long tiempoInicio = System.nanoTime();
+	public Prim(Parque parque) {
+		this.parque = parque;
+		this.estacionesVisitadas = new HashSet<>();
+		this.senderosVisitados = new HashSet<>();
+	}
 
-        estacionesVisitadas.add(estacionInicial);
-        PriorityQueue<Sendero> colaPrioridad = new PriorityQueue<>((a, b) -> Integer.compare(a.obtenerImpactoAmbiental(), b.obtenerImpactoAmbiental()));
+	public void ejecutarPrim(Estacion estacionInicial) {
+		long tiempoInicio = System.nanoTime();
 
-        for (Sendero sendero : parque.obtenerSenderosDesde(estacionInicial)) {
-            colaPrioridad.add(sendero);
-        }
+		estacionesVisitadas.add(estacionInicial);
+		PriorityQueue<Sendero> colaPrioridad = new PriorityQueue<>(
+				(a, b) -> Integer.compare(a.obtenerImpactoAmbiental(), b.obtenerImpactoAmbiental()));
 
-        while (!colaPrioridad.isEmpty() && estacionesVisitadas.size() < parque.obtenerEstaciones().size()) {
-            Sendero senderoMinimo = colaPrioridad.poll();
-            Estacion estacionNuevo = obtenerEstacionNuevo(senderoMinimo);
+		for (Sendero sendero : parque.obtenerSenderosDesde(estacionInicial)) {
+			colaPrioridad.add(sendero);
+		}
 
-            if (!estacionesVisitadas.contains(estacionNuevo)) {
-                senderosVisitados.add(senderoMinimo);
-                estacionesVisitadas.add(estacionNuevo);
+		while (!colaPrioridad.isEmpty() && estacionesVisitadas.size() < parque.obtenerEstaciones().size()) {
+			Sendero senderoMinimo = colaPrioridad.poll();
+			Estacion estacionNuevo = obtenerEstacionNuevo(senderoMinimo);
 
-                for (Sendero sendero : parque.obtenerSenderosDesde(estacionNuevo)) {
-                    if (!senderosVisitados.contains(sendero)) {
-                        colaPrioridad.add(sendero);
-                    }
-                }
-            }
-        }
-        tiempoEjecucion = System.nanoTime() - tiempoInicio;
+			if (!estacionesVisitadas.contains(estacionNuevo)) {
+				senderosVisitados.add(senderoMinimo);
+				estacionesVisitadas.add(estacionNuevo);
 
-    }
+				for (Sendero sendero : parque.obtenerSenderosDesde(estacionNuevo)) {
+					if (!senderosVisitados.contains(sendero)) {
+						colaPrioridad.add(sendero);
+					}
+				}
+			}
+		}
+		tiempoEjecucion = System.nanoTime() - tiempoInicio;
+	}
 
-    private Estacion obtenerEstacionNuevo(Sendero sendero) {
-        if (estacionesVisitadas.contains(sendero.obtenerEstacionOrigen())) {
-            return sendero.obtenerEstacionDestino();
-        } else {
-            return sendero.obtenerEstacionOrigen();
-        }
-    }
+	private Estacion obtenerEstacionNuevo(Sendero sendero) {
+		if (estacionesVisitadas.contains(sendero.obtenerEstacionOrigen())) {
+			return sendero.obtenerEstacionDestino();
+		} else {
+			return sendero.obtenerEstacionOrigen();
+		}
+	}
 
-    public Set<Estacion> getEstacionesVisitadas() {
-        return estacionesVisitadas;
-    }
+	public Set<Estacion> getEstacionesVisitadas() {
+		return estacionesVisitadas;
+	}
 
-    public Set<Sendero> getSenderosVisitados() {
-        return senderosVisitados;
-    }
-    public double obtenerTiempoEjecucion() {
-        return tiempoEjecucion;
-    }
+	public Set<Sendero> getSenderosVisitados() {
+		return senderosVisitados;
+	}
+
+	public double obtenerTiempoEjecucion() {
+		return tiempoEjecucion;
+	}
 }

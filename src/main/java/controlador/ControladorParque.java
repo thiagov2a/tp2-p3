@@ -6,11 +6,12 @@ import main.java.modelo.Parque;
 import main.java.modelo.Sendero;
 import main.java.vista.VistaParque;
 import main.java.servicio.ConsumoParque;
-import org.openstreetmap.gui.jmapviewer.Coordinate;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import org.openstreetmap.gui.jmapviewer.Coordinate;
 
 public class ControladorParque implements IVistaControlador {
 
@@ -31,12 +32,8 @@ public class ControladorParque implements IVistaControlador {
 
 	@Override
 	public String obtenerNombreEstacion(int id) {
-		return parque.obtenerEstaciones()
-				.stream()
-				.filter(e -> e.obtenerId() == id)
-				.map(Estacion::obtenerNombre)
-				.findFirst()
-				.orElse("Desconocido");
+		return parque.obtenerEstaciones().stream().filter(e -> e.obtenerId() == id).map(Estacion::obtenerNombre)
+				.findFirst().orElse("Desconocido");
 	}
 
 	@Override

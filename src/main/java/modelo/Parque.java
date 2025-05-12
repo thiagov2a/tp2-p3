@@ -55,7 +55,9 @@ public class Parque {
 	}
 
 	private boolean existeConexion(Sendero nuevoSendero) {
-		return senderos.stream().anyMatch(s -> s.equals(nuevoSendero));
+		return senderos.stream()
+				.anyMatch(s -> s.obtenerEstacionOrigen() == nuevoSendero.obtenerEstacionOrigen()
+							&& s.obtenerEstacionDestino() == nuevoSendero.obtenerEstacionDestino());
 	}
 
 	public boolean contieneEstacion(Estacion estacion) {

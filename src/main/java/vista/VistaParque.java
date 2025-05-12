@@ -26,7 +26,6 @@ public class VistaParque {
 	private ControladorParque controlador;
 
 	public VistaParque() {
-		// Acá pedimos la selección del parque
 		String[] opciones = { "Parque El Palmar", "Parque Glaciares", "Parque Iguazú", "Parque Talampaya" };
 		String seleccion = (String) JOptionPane.showInputDialog(null, "Selecciona un parque", "Inicio",
 				JOptionPane.QUESTION_MESSAGE, null, opciones, opciones[0]);
@@ -35,16 +34,19 @@ public class VistaParque {
 			System.exit(0);
 		}
 
-		String rutaJson = switch (seleccion) {
+		String rutaJson = seleccionParque(seleccion);
+
+		ControladorParque ctrl = new ControladorParque(rutaJson);
+		this.controlador = ctrl;
+	}
+
+	private String seleccionParque(String seleccion) {
+		return switch (seleccion) {
 		case "Parque El Palmar" -> "src/main/recursos/parque_el_palmar.json";
 		case "Parque Glaciares" -> "src/main/recursos/parque_glaciares.json";
 		case "Parque Iguazú" -> "src/main/recursos/parque_iguazu.json";
 		default -> "src/main/recursos/parque_talampaya.json";
 		};
-
-		// Creamos el controlador con la ruta elegida
-		ControladorParque ctrl = new ControladorParque(rutaJson);
-		this.controlador = ctrl;
 	}
 
 	public void mostrar() {
@@ -111,6 +113,12 @@ public class VistaParque {
 			mapa.addMapPolygon(linea);
 		}
 	}
+	
+    private void bloquearZoom() {
+        mapa.addMouseListener(new java.awt.event.MouseAdapter() {});
+        mapa.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {});
+        mapa.addMouseWheelListener(e -> {});  // Ignorar zoom rueda
+    }
 
 	private Color colorPorImpacto(int impacto) {
 		if (impacto <= 3)
@@ -135,6 +143,8 @@ public class VistaParque {
 	}
 
 	private int calcularImpactoTotal(List<Sendero> senderosAGM) {
-		return senderosAGM.stream().mapToInt(Sendero::obtenerImpactoAmbiental).sum();
+		return senderosAGM.stream()
+				.mapToInt(Sendero::obtenerImpactoAmbiental)
+				.sum();
 	}
 }
