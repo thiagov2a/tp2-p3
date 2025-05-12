@@ -1,4 +1,4 @@
-package test.java.algoritmo;
+package test.java.modelo;
 
 import main.java.modelo.Estacion;
 import main.java.modelo.Parque;
