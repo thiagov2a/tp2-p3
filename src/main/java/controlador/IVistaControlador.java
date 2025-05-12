@@ -1,6 +1,6 @@
 package main.java.controlador;
 
-import main.java.modelo.Sendero;
+import main.java.dto.SenderoDTO;
 
 import java.util.List;
 import java.util.Map;
@@ -9,13 +9,19 @@ import org.openstreetmap.gui.jmapviewer.Coordinate;
 
 public interface IVistaControlador {
 
-	public Map<Integer, Coordinate> obtenerCoordenadasEstaciones();
+	Map<Integer, Coordinate> obtenerCoordenadasEstaciones();
 
-	public String obtenerNombreEstacion(int id);
+	String obtenerNombreEstacion(int id);
 
-	public List<Sendero> obtenerSenderos();
+	List<SenderoDTO> obtenerSenderos();
 
-	public List<Sendero> obtenerAGM();
+	List<SenderoDTO> obtenerAGM();
 
-	public boolean verificarConectividad();
+	int obtenerImpactoTotalAGM();
+
+	boolean verificarConectividad();
+
+	Coordinate obtenerCentroParque();
+
+	int obtenerZoomInicial();
 }

@@ -1,7 +1,7 @@
 package main.java.vista;
 
 import main.java.controlador.ControladorParque;
-import main.java.modelo.Sendero;
+import main.java.dto.SenderoDTO;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -35,17 +35,15 @@ public class VistaParque {
 		}
 
 		String rutaJson = seleccionParque(seleccion);
-
-		ControladorParque ctrl = new ControladorParque(rutaJson);
-		this.controlador = ctrl;
+		this.controlador = new ControladorParque(rutaJson);
 	}
 
 	private String seleccionParque(String seleccion) {
 		return switch (seleccion) {
-		case "Parque El Palmar" -> "src/main/recursos/parque_el_palmar.json";
-		case "Parque Glaciares" -> "src/main/recursos/parque_glaciares.json";
-		case "Parque Iguazú" -> "src/main/recursos/parque_iguazu.json";
-		default -> "src/main/recursos/parque_talampaya.json";
+			case "Parque El Palmar" -> "src/main/recursos/parque_el_palmar.json";
+			case "Parque Glaciares" -> "src/main/recursos/parque_glaciares.json";
+			case "Parque Iguazú" -> "src/main/recursos/parque_iguazu.json";
+			default -> "src/main/recursos/parque_talampaya.json";
 		};
 	}
 
@@ -84,8 +82,8 @@ public class VistaParque {
 
 		JButton btnAGM = new JButton("Mostrar AGM");
 		btnAGM.addActionListener(e -> {
-			List<Sendero> agm = controlador.obtenerAGM();
-			int impactoTotal = calcularImpactoTotal(agm);
+			List<SenderoDTO> agm = controlador.obtenerAGM();
+			int impactoTotal = controlador.obtenerImpactoTotalAGM();
 			dibujarSenderosDestacados(agm, Color.BLUE);
 			JOptionPane.showMessageDialog(frame, "Impacto ambiental total: " + impactoTotal);
 		});
@@ -103,22 +101,20 @@ public class VistaParque {
 			mapa.addMapMarker(new MapMarkerDot(nombre, entry.getValue()));
 		}
 
-		for (Sendero s : controlador.obtenerSenderos()) {
-			Coordinate c1 = mapaEstaciones.get(s.obtenerEstacionOrigen().obtenerId());
-			Coordinate c2 = mapaEstaciones.get(s.obtenerEstacionDestino().obtenerId());
-
-			MapPolygonImpl linea = new MapPolygonImpl(List.of(c1, c2, c1));
-			Color colorImpacto = colorPorImpacto(s.obtenerImpactoAmbiental());
-			linea.setColor(colorImpacto);
+		for (SenderoDTO s : controlador.obtenerSenderos()) {
+			MapPolygonImpl linea = new MapPolygonImpl(List.of(s.getOrigen(), s.getDestino(), s.getOrigen()));
+			linea.setColor(colorPorImpacto(s.getImpactoAmbiental()));
 			mapa.addMapPolygon(linea);
 		}
 	}
-	
-    private void bloquearZoom() {
-        mapa.addMouseListener(new java.awt.event.MouseAdapter() {});
-        mapa.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {});
-        mapa.addMouseWheelListener(e -> {});  // Ignorar zoom rueda
-    }
+
+	private void dibujarSenderosDestacados(List<SenderoDTO> senderos, Color color) {
+		for (SenderoDTO s : senderos) {
+			MapPolygonImpl linea = new MapPolygonImpl(List.of(s.getOrigen(), s.getDestino(), s.getOrigen()));
+			linea.setColor(color);
+			mapa.addMapPolygon(linea);
+		}
+	}
 
 	private Color colorPorImpacto(int impacto) {
 		if (impacto <= 3)
@@ -127,24 +123,5 @@ public class VistaParque {
 			return Color.YELLOW;
 		else
 			return Color.RED;
-	}
-
-	private void dibujarSenderosDestacados(List<Sendero> senderos, Color color) {
-		Map<Integer, Coordinate> mapaEstaciones = controlador.obtenerCoordenadasEstaciones();
-
-		for (Sendero s : senderos) {
-			Coordinate c1 = mapaEstaciones.get(s.obtenerEstacionOrigen().obtenerId());
-			Coordinate c2 = mapaEstaciones.get(s.obtenerEstacionDestino().obtenerId());
-
-			MapPolygonImpl linea = new MapPolygonImpl(List.of(c1, c2, c1));
-			linea.setColor(color);
-			mapa.addMapPolygon(linea);
-		}
-	}
-
-	private int calcularImpactoTotal(List<Sendero> senderosAGM) {
-		return senderosAGM.stream()
-				.mapToInt(Sendero::obtenerImpactoAmbiental)
-				.sum();
 	}
 }
