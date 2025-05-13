@@ -30,7 +30,6 @@ public class Prim implements AlgoritmoAGM {
 
 	        Estacion origen = actual.obtenerEstacionOrigen();
 	        Estacion destino = actual.obtenerEstacionDestino();
-
 	        Estacion nueva = visitadas.contains(origen) ? destino : origen;
 
 	        if (!visitadas.contains(nueva)) {
