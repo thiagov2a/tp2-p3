@@ -1,5 +1,6 @@
-package main.java.controlador;
+package main.java.interfaz;
 
+import main.java.dto.ResultadoAGM;
 import main.java.dto.SenderoDTO;
 
 import java.util.List;
@@ -15,9 +16,7 @@ public interface IVistaControlador {
 
 	List<SenderoDTO> obtenerSenderos();
 
-	List<SenderoDTO> obtenerAGM();
-
-	int obtenerImpactoTotalAGM();
+	ResultadoAGM obtenerAGM(AlgoritmoAGM algoritmo);
 
 	boolean verificarConectividad();
 

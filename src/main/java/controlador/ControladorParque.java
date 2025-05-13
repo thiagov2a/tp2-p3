@@ -1,7 +1,9 @@
 package main.java.controlador;
 
-import main.java.algoritmo.Kruskal;
+import main.java.dto.ResultadoAGM;
 import main.java.dto.SenderoDTO;
+import main.java.interfaz.AlgoritmoAGM;
+import main.java.interfaz.IVistaControlador;
 import main.java.modelo.Estacion;
 import main.java.modelo.Parque;
 import main.java.modelo.Sendero;
@@ -45,24 +47,32 @@ public class ControladorParque implements IVistaControlador {
 		Map<Integer, Coordinate> coords = obtenerCoordenadasEstaciones();
 
 		return parque.obtenerSenderos().stream()
-				.map(s -> new SenderoDTO(coords.get(s.obtenerEstacionOrigen().obtenerId()),
-						coords.get(s.obtenerEstacionDestino().obtenerId()), s.obtenerImpactoAmbiental()))
+				.map(s -> new SenderoDTO(
+						coords.get(s.obtenerEstacionOrigen().obtenerId()),
+						coords.get(s.obtenerEstacionDestino().obtenerId()),
+						s.obtenerImpactoAmbiental()))
 				.collect(Collectors.toList());
 	}
 
 	@Override
-	public List<SenderoDTO> obtenerAGM() {
-		Map<Integer, Coordinate> coords = obtenerCoordenadasEstaciones();
+	public ResultadoAGM obtenerAGM(AlgoritmoAGM algoritmo) {
+	    Map<Integer, Coordinate> coords = obtenerCoordenadasEstaciones();
 
-		return Kruskal.obtenerAGM(parque).stream()
-				.map(s -> new SenderoDTO(coords.get(s.obtenerEstacionOrigen().obtenerId()),
-						coords.get(s.obtenerEstacionDestino().obtenerId()), s.obtenerImpactoAmbiental()))
-				.collect(Collectors.toList());
-	}
+	    long inicio = System.nanoTime();
+	    List<Sendero> resultado = algoritmo.obtenerAGM(parque);
+	    long fin = System.nanoTime() - inicio;
 
-	@Override
-	public int obtenerImpactoTotalAGM() {
-		return Kruskal.obtenerAGM(parque).stream().mapToInt(Sendero::obtenerImpactoAmbiental).sum();
+	    List<SenderoDTO> senderos = resultado.stream()
+	        .map(s -> new SenderoDTO(
+	                coords.get(s.obtenerEstacionOrigen().obtenerId()),
+	                coords.get(s.obtenerEstacionDestino().obtenerId()),
+	                s.obtenerImpactoAmbiental()))
+	        .toList();
+
+	    int impactoTotal = resultado.stream().mapToInt(Sendero::obtenerImpactoAmbiental).sum();
+	    double tiempo = fin / 1000000.0;
+
+	    return new ResultadoAGM(senderos, impactoTotal, tiempo);
 	}
 
 	@Override

@@ -14,15 +14,15 @@ public class SenderoDTO {
 		this.impactoAmbiental = impactoAmbiental;
 	}
 
-	public Coordinate getOrigen() {
+	public Coordinate obtenerOrigen() {
 		return origen;
 	}
 
-	public Coordinate getDestino() {
+	public Coordinate obtenerDestino() {
 		return destino;
 	}
 
-	public int getImpactoAmbiental() {
+	public int obtenerImpactoAmbiental() {
 		return impactoAmbiental;
 	}
 }

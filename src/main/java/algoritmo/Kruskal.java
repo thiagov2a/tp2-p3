@@ -1,29 +1,27 @@
 package main.java.algoritmo;
 
 import main.java.modelo.Sendero;
+import main.java.interfaz.AlgoritmoAGM;
 import main.java.modelo.Parque;
 
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-public class Kruskal {
+public class Kruskal implements AlgoritmoAGM {
 
-	private static double tiempoEjecucion;
-
-	public static List<Sendero> obtenerAGM(Parque mapa) {
-		if (mapa.obtenerEstaciones().isEmpty()) {
+	@Override
+	public List<Sendero> obtenerAGM(Parque parque) {
+		if (parque.obtenerEstaciones().isEmpty()) {
 			return new ArrayList<>();
 		}
 
-		long tiempoInicio = System.nanoTime();
-
 		// Copia para no modificar la lista original
-		List<Sendero> senderos = new ArrayList<>(mapa.obtenerSenderos());
+		List<Sendero> senderos = new ArrayList<>(parque.obtenerSenderos());
 		senderos.sort(Comparator.comparingInt(Sendero::obtenerImpactoAmbiental));
 
-		List<Sendero> arbol = new ArrayList<>();
-		UnionFind uf = new UnionFind(mapa.obtenerEstaciones().size());
+		List<Sendero> agm = new ArrayList<>();
+		UnionFind uf = new UnionFind(parque.obtenerEstaciones().size());
 
 		for (Sendero sendero : senderos) {
 			int origen = sendero.obtenerEstacionOrigen().obtenerId();
@@ -31,20 +29,13 @@ public class Kruskal {
 
 			if (uf.find(origen) != uf.find(destino)) {
 				uf.union(origen, destino);
-				arbol.add(sendero);
+				agm.add(sendero);
 
-				if (arbol.size() == mapa.obtenerEstaciones().size() - 1) {
+				if (agm.size() == parque.obtenerEstaciones().size() - 1) {
 					break; // AGM completo
 				}
 			}
 		}
-
-		tiempoEjecucion = System.nanoTime() - tiempoInicio;
-
-		return arbol;
-	}
-
-	public double obtenerTiempoEjecucion() {
-		return tiempoEjecucion;
+		return agm;
 	}
 }

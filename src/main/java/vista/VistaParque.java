@@ -1,17 +1,16 @@
 package main.java.vista;
 
+import main.java.algoritmo.Kruskal;
+import main.java.algoritmo.Prim;
 import main.java.controlador.ControladorParque;
 import main.java.dto.SenderoDTO;
+import main.java.interfaz.AlgoritmoAGM;
+import main.java.dto.ResultadoAGM;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
+import javax.swing.*;
+import java.awt.*;
 import java.util.List;
 import java.util.Map;
-
-import javax.swing.JButton;
-import javax.swing.JOptionPane;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
 
 import org.openstreetmap.gui.jmapviewer.Coordinate;
 import org.openstreetmap.gui.jmapviewer.JMapViewer;
@@ -66,30 +65,50 @@ public class VistaParque {
 		mapa = new JMapViewer();
 		mapa.setZoomControlsVisible(false);
 		mapa.setDisplayPosition(centroParque, zoomInicial);
+		mapa.setEnabled(false);
 
 		panelMapa = new JPanel(new BorderLayout());
 		panelMapa.add(mapa, BorderLayout.CENTER);
 		frame.getContentPane().add(panelMapa, BorderLayout.CENTER);
 
 		JPanel panelBotones = new JPanel();
+		panelBotones.setLayout(new FlowLayout());
 
-		JButton btnConectividad = new JButton("Verificar conexión");
-		btnConectividad.addActionListener(e -> {
-			boolean conexo = controlador.verificarConectividad();
-			String mensaje = conexo ? "El parque es conexo." : "El parque NO es conexo.";
-			JOptionPane.showMessageDialog(frame, mensaje);
-		});
-
-		JButton btnAGM = new JButton("Mostrar AGM");
+		JButton btnAGM = new JButton("Calcular AGM");
 		btnAGM.addActionListener(e -> {
-			List<SenderoDTO> agm = controlador.obtenerAGM();
-			int impactoTotal = controlador.obtenerImpactoTotalAGM();
-			dibujarSenderosDestacados(agm, Color.BLUE);
-			JOptionPane.showMessageDialog(frame, "Impacto ambiental total: " + impactoTotal);
+			if (!controlador.verificarConectividad()) {
+				JOptionPane.showMessageDialog(frame, "El parque no es conexo. No se puede calcular el AGM.");
+				return;
+			}
+
+			String[] opcionesAlg = { "Prim", "Kruskal" };
+			String algoritmo = (String) JOptionPane.showInputDialog(frame, "Seleccione el algoritmo",
+					"Algoritmo AGM", JOptionPane.QUESTION_MESSAGE, null, opcionesAlg, opcionesAlg[0]);
+
+			if (algoritmo != null) {
+			    AlgoritmoAGM algoritmoAGM;
+
+			    if (algoritmo.equals("Prim")) {
+			        algoritmoAGM = new Prim();
+			    } else {
+			        algoritmoAGM = new Kruskal();
+			    }
+
+			    ResultadoAGM resultado = controlador.obtenerAGM(algoritmoAGM);
+				dibujarSenderosDestacados(resultado.obtenerSenderos());
+				JOptionPane.showMessageDialog(frame,
+						"Impacto total: " + resultado.obtenerImpactoTotal() + "\nTiempo de ejecución: " + resultado.obtenerTiempoEjecucion() + " ms");
+			}
 		});
 
-		panelBotones.add(btnConectividad);
+		JButton btnVolver = new JButton("Cambiar Parque");
+		btnVolver.addActionListener(e -> {
+			frame.dispose();
+			new VistaParque().mostrar();
+		});
+
 		panelBotones.add(btnAGM);
+		panelBotones.add(btnVolver);
 		frame.getContentPane().add(panelBotones, BorderLayout.SOUTH);
 	}
 
@@ -102,18 +121,25 @@ public class VistaParque {
 		}
 
 		for (SenderoDTO s : controlador.obtenerSenderos()) {
-			MapPolygonImpl linea = new MapPolygonImpl(List.of(s.getOrigen(), s.getDestino(), s.getOrigen()));
-			linea.setColor(colorPorImpacto(s.getImpactoAmbiental()));
+			MapPolygonImpl linea = new MapPolygonImpl(List.of(s.obtenerOrigen(), s.obtenerDestino(), s.obtenerOrigen()));
+			linea.setColor(colorPorImpacto(s.obtenerImpactoAmbiental()));
 			mapa.addMapPolygon(linea);
 		}
 	}
 
-	private void dibujarSenderosDestacados(List<SenderoDTO> senderos, Color color) {
+	private void dibujarSenderosDestacados(List<SenderoDTO> senderos) {
+		limpiarMapa();
+		
 		for (SenderoDTO s : senderos) {
-			MapPolygonImpl linea = new MapPolygonImpl(List.of(s.getOrigen(), s.getDestino(), s.getOrigen()));
-			linea.setColor(color);
+			MapPolygonImpl linea = new MapPolygonImpl(List.of(s.obtenerOrigen(), s.obtenerDestino(), s.obtenerOrigen()));
+			linea.setColor(colorPorImpacto(s.obtenerImpactoAmbiental()));
 			mapa.addMapPolygon(linea);
 		}
+	}
+	
+	private void limpiarMapa() {
+	    mapa.removeAllMapPolygons();
+	    // mapa.removeAllMapMarkers();
 	}
 
 	private Color colorPorImpacto(int impacto) {

@@ -1,72 +1,52 @@
 package main.java.algoritmo;
 
-import java.util.HashSet;
-import java.util.PriorityQueue;
-import java.util.Set;
-
+import main.java.modelo.Sendero;
 import main.java.modelo.Estacion;
 import main.java.modelo.Parque;
-import main.java.modelo.Sendero;
+import main.java.interfaz.AlgoritmoAGM;
 
-public class Prim {
+import java.util.*;
 
-	private Parque parque;
-	private Set<Estacion> estacionesVisitadas;
-	private Set<Sendero> senderosVisitados;
-	private static double tiempoEjecucion;
+public class Prim implements AlgoritmoAGM {
 
-	public Prim(Parque parque) {
-		this.parque = parque;
-		this.estacionesVisitadas = new HashSet<>();
-		this.senderosVisitados = new HashSet<>();
-	}
+	@Override
+	public List<Sendero> obtenerAGM(Parque parque) {
+	    if (parque.obtenerEstaciones().isEmpty()) {
+	        return new ArrayList<>();
+	    }
 
-	public void ejecutarPrim(Estacion estacionInicial) {
-		long tiempoInicio = System.nanoTime();
+	    Set<Estacion> visitadas = new HashSet<>();
+	    List<Sendero> agm = new ArrayList<>();
 
-		estacionesVisitadas.add(estacionInicial);
-		PriorityQueue<Sendero> colaPrioridad = new PriorityQueue<>(
-				(a, b) -> Integer.compare(a.obtenerImpactoAmbiental(), b.obtenerImpactoAmbiental()));
+	    PriorityQueue<Sendero> cola = new PriorityQueue<>(Comparator.comparingInt(Sendero::obtenerImpactoAmbiental));
 
-		for (Sendero sendero : parque.obtenerSenderosDesde(estacionInicial)) {
-			colaPrioridad.add(sendero);
-		}
+	    // Obtener una estación inicial arbitraria del Set
+	    Estacion inicio = parque.obtenerEstaciones().iterator().next();
+	    visitadas.add(inicio);
+	    cola.addAll(parque.obtenerSenderosDesde(inicio));
 
-		while (!colaPrioridad.isEmpty() && estacionesVisitadas.size() < parque.obtenerEstaciones().size()) {
-			Sendero senderoMinimo = colaPrioridad.poll();
-			Estacion estacionNuevo = obtenerEstacionNuevo(senderoMinimo);
+	    while (!cola.isEmpty() && visitadas.size() < parque.obtenerEstaciones().size()) {
+	        Sendero actual = cola.poll();
 
-			if (!estacionesVisitadas.contains(estacionNuevo)) {
-				senderosVisitados.add(senderoMinimo);
-				estacionesVisitadas.add(estacionNuevo);
+	        Estacion origen = actual.obtenerEstacionOrigen();
+	        Estacion destino = actual.obtenerEstacionDestino();
 
-				for (Sendero sendero : parque.obtenerSenderosDesde(estacionNuevo)) {
-					if (!senderosVisitados.contains(sendero)) {
-						colaPrioridad.add(sendero);
-					}
-				}
-			}
-		}
-		tiempoEjecucion = System.nanoTime() - tiempoInicio;
-	}
+	        Estacion nueva = visitadas.contains(origen) ? destino : origen;
 
-	private Estacion obtenerEstacionNuevo(Sendero sendero) {
-		if (estacionesVisitadas.contains(sendero.obtenerEstacionOrigen())) {
-			return sendero.obtenerEstacionDestino();
-		} else {
-			return sendero.obtenerEstacionOrigen();
-		}
-	}
+	        if (!visitadas.contains(nueva)) {
+	            visitadas.add(nueva);
+	            agm.add(actual);
 
-	public Set<Estacion> getEstacionesVisitadas() {
-		return estacionesVisitadas;
-	}
-
-	public Set<Sendero> getSenderosVisitados() {
-		return senderosVisitados;
-	}
-
-	public double obtenerTiempoEjecucion() {
-		return tiempoEjecucion;
+	            for (Sendero s : parque.obtenerSenderosDesde(nueva)) {
+	                Estacion otro = s.obtenerEstacionOrigen().equals(nueva)
+	                        ? s.obtenerEstacionDestino()
+	                        : s.obtenerEstacionOrigen();
+	                if (!visitadas.contains(otro)) {
+	                    cola.add(s);
+	                }
+	            }
+	        }
+	    }
+	    return agm;
 	}
 }

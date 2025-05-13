@@ -8,7 +8,7 @@ import org.junit.Test;
 
 import main.java.algoritmo.UnionFind;
 
-public class UnionfindTest {
+public class UnionFindTest {
 
 	@Test
     public void testFind() {
