@@ -12,8 +12,8 @@ import static org.junit.jupiter.api.Assertions.*;
 public class KruskalTest {
 
 	@Test
-    public void testAGM() {
-        Parque parque = new Parque("Reserva", -34.5, -58.4, 12);
+    public void testAGMKruskal() {
+        Parque parque = new Parque("Parque Nacional", -34.5, -58.4, 12);
 
         Estacion e0 = new Estacion(0, "Estacion A", -14.59, -54.15);
         Estacion e1 = new Estacion(1, "Estacion B", -30.72, -15.69);
@@ -39,7 +39,7 @@ public class KruskalTest {
     }
 
     @Test
-    public void testAGMVacio() {
+    public void testAGMKruskalVacio() {
         Parque parque = new Parque("",0,0,0);
 
         Kruskal kruskal = new Kruskal();

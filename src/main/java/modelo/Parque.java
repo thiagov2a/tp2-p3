@@ -115,8 +115,7 @@ public class Parque {
 		return BFS.esConexo(this);
 	}
 
-	@Override
-	public String toString() {
+	public String obtenerNombre() {
 		return this.nombre;
 	}
 }
