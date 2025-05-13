@@ -2,7 +2,7 @@ package main.java.modelo;
 
 public class Estacion {
 
-	private final int id;
+	private int id;
 	private String nombre;
 	private double latitud;
 	private double longitud;
@@ -28,10 +28,5 @@ public class Estacion {
 
 	public double obtenerLongitud() {
 		return longitud;
-	}
-
-	@Override
-	public String toString() {
-		return nombre + " (" + id + ")";
 	}
 }

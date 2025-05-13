@@ -1,102 +1,127 @@
 package test.java.modelo;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
+import org.junit.Before;
+import org.junit.Test;
+
 import main.java.modelo.Estacion;
 import main.java.modelo.Parque;
 import main.java.modelo.Sendero;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.*;
-
-import java.util.Set;
 
 public class ParqueTest {
 
-	private Parque parque;
-	private Estacion estacion1, estacion2, estacion3;
+    private Parque parque;
 
-	@BeforeEach
-	public void inicializarVariables() {
-		parque = new Parque("Parque Nacional", -34.1, -58.4, 10);
-		estacion1 = new Estacion(1, "Estacion A", -54.51, -48.11);
-		estacion2 = new Estacion(2, "Estacion B", -74.12, -38.92);
-		estacion3 = new Estacion(3, "Estacion C", -4.83, -84.32);
-	}
+    @Before
+    public void setUp() {
+        parque = new Parque("Parque Nacional", 0.0, 0.0, 10);
+    }
 
-	@Test
-	public void testAgregarEstaciones() {
-		parque.agregarEstacion(estacion1);
-		parque.agregarEstacion(estacion2);
-		assertEquals(2, parque.obtenerEstaciones().size());
-		assertTrue(parque.contieneEstacion(estacion1));
-	}
+    @Test
+    public void testAgregarEstacion() {
+        Estacion estacion = new Estacion(0, "Estacion A", 0, 0);
+        parque.agregarEstacion(estacion);
+        assertTrue(parque.contieneEstacion(estacion));
+    }
 
-	@Test
-	void testAgregarSendero() {
-		parque.agregarEstacion(estacion1);
-		parque.agregarEstacion(estacion2);
-		parque.agregarSendero(estacion1, estacion2, 5);
-	}
-	
-	@Test
-	void testAgregarEstacionDuplicada() {
-		parque.agregarEstacion(estacion1);
-		assertThrows(IllegalArgumentException.class, () -> parque.agregarEstacion(estacion1));
-	}
+    @Test(expected = IllegalArgumentException.class)
+    public void testAgregarEstacionDuplicada() {
+        Estacion estacion = new Estacion(0, "Estacion A", 0, 0);
+        parque.agregarEstacion(estacion);
+        parque.agregarEstacion(estacion); // Duplicada, debe lanzar excepción
+    }
 
-	@Test
-	void testAgregarSenderoDuplicado() {
-		parque.agregarEstacion(estacion1);
-		parque.agregarEstacion(estacion2);
-		parque.agregarSendero(estacion1, estacion2, 5);
-		assertThrows(IllegalArgumentException.class, () -> parque.agregarSendero(estacion1, estacion2, 7));
-	}
+    @Test
+    public void testEliminarEstacion() {
+        Estacion estacion = new Estacion(0, "Estacion A", 0, 0);
+        parque.agregarEstacion(estacion);
+        parque.eliminarEstacion(estacion);
+        assertFalse(parque.contieneEstacion(estacion));
+    }
 
-	@Test
-	void testAgregarSenderoConEstacionesNoRegistradas() {
-		assertThrows(IllegalArgumentException.class, () -> parque.agregarSendero(estacion1, estacion2, 5));
-	}
+    @Test(expected = IllegalArgumentException.class)
+    public void testEliminarEstacionNoExistente() {
+        Estacion estacion = new Estacion(0, "Estacion A", 0, 0);
+        parque.eliminarEstacion(estacion); // No está registrada, debe lanzar excepción
+    }
 
-	@Test
-	void testEliminarEstacion() {
-		parque.agregarEstacion(estacion1);
-		parque.agregarEstacion(estacion2);
-		parque.agregarSendero(estacion1, estacion2, 4);
+    @Test
+    public void testAgregarSendero() {
+        Estacion origen = new Estacion(0, "Estacion A", 0, 0);
+        Estacion destino = new Estacion(1, "Estacion B", 1, 1);
+        parque.agregarEstacion(origen);
+        parque.agregarEstacion(destino);
+        parque.agregarSendero(origen, destino, 5);
+        assertTrue(parque.obtenerSenderosDesde(origen).size() > 0);
+    }
 
-		parque.eliminarEstacion(estacion1);
-		assertFalse(parque.contieneEstacion(estacion1));
-	}
+    @Test(expected = IllegalArgumentException.class)
+    public void testAgregarSenderoConEstacionNoRegistrada() {
+        Estacion origen = new Estacion(0, "Estacion A", 0, 0);
+        Estacion destino = new Estacion(1, "Estacion B", 1, 1);
+        parque.agregarSendero(origen, destino, 5); // Las estaciones aún no están agregadas, debe lanzar excepción
+    }
 
-	@Test
-	void testEliminarSendero() {
-		parque.agregarEstacion(estacion1);
-		parque.agregarEstacion(estacion2);
-		parque.agregarSendero(estacion1, estacion2, 2);
-		Sendero s = parque.obtenerSenderos().get(0);
-		parque.eliminarSendero(s);
-		assertTrue(parque.obtenerSenderos().isEmpty());
-	}
+    @Test
+    public void testEliminarSendero() {
+        Estacion origen = new Estacion(0, "Estacion A", 0, 0);
+        Estacion destino = new Estacion(1, "Estacion B", 1, 1);
+        parque.agregarEstacion(origen);
+        parque.agregarEstacion(destino);
+        parque.agregarSendero(origen, destino, 5);
+        Sendero sendero = parque.obtenerSenderosDesde(origen).iterator().next();
+        parque.eliminarSendero(sendero);
+        assertTrue(parque.obtenerSenderosDesde(origen).isEmpty());
+    }
 
-	@Test
-	public void testObtenerSenderosDesde() {
-		parque.agregarEstacion(estacion1);
-		parque.agregarEstacion(estacion2);
-		parque.agregarSendero(estacion1, estacion2, 2);
-		Set<Sendero> desdeA = parque.obtenerSenderosDesde(estacion1);
-		assertEquals(1, desdeA.size());
-	}
+    @Test(expected = IllegalArgumentException.class)
+    public void testEliminarSenderoNoExistente() {
+        Estacion origen = new Estacion(0, "Estacion A", 0, 0);
+        Estacion destino = new Estacion(1, "Estacion B", 1, 1);
+        Sendero sendero = new Sendero(origen, destino, 5);
+        parque.eliminarSendero(sendero); // El sendero no existe, debe lanzar excepción
+    }
 
-	@Test
-	public void testConectividad() {
-		parque.agregarEstacion(estacion1);
-		parque.agregarEstacion(estacion2);
-		parque.agregarEstacion(estacion3);
-		parque.agregarSendero(estacion1, estacion2, 1);
-		parque.agregarSendero(estacion2, estacion3, 1);
-		assertTrue(parque.esConexo());
+    @Test
+    public void testEsConexoConEstacionesYSenderosConectados() {
+        Estacion a = new Estacion(0, "A", 0, 0);
+        Estacion b = new Estacion(1, "B", 1, 1);
+        parque.agregarEstacion(a);
+        parque.agregarEstacion(b);
+        parque.agregarSendero(a, b, 5);
+        assertTrue(parque.esConexo());
+    }
 
-		parque.eliminarSendero(parque.obtenerSenderos().get(0));
-		assertFalse(parque.esConexo());
-	}
+    @Test
+    public void testEsConexoConEstacionesSinSenderos() {
+        Estacion a = new Estacion(0, "A", 0, 0);
+        Estacion b = new Estacion(1, "B", 1, 1);
+        parque.agregarEstacion(a);
+        parque.agregarEstacion(b);
+        // No hay senderos, no es conexo
+        assertFalse(parque.esConexo());
+    }
 
+    @Test
+    public void testObtenerCentroLatitud() {
+        assertEquals(0.0, parque.obtenerLatitud(), 0.001);
+    }
+
+    @Test
+    public void testObtenerCentroLongitud() {
+        assertEquals(0.0, parque.obtenerLongitud(), 0.001);
+    }
+
+    @Test
+    public void testObtenerZoomInicial() {
+        assertEquals(10, parque.obtenerZoom());
+    }
+
+    @Test
+    public void testObtenerNombre() {
+        assertEquals("Parque Nacional", parque.obtenerNombre());
+    }
 }

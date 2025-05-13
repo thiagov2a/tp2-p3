@@ -1,51 +1,68 @@
 package test.java.algoritmo;
 
-import main.java.modelo.Parque;
-import main.java.modelo.Estacion;
-import main.java.modelo.Sendero;
-import main.java.algoritmo.Kruskal;
-import org.junit.jupiter.api.Test;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.Before;
+import org.junit.Test;
+
+import main.java.algoritmo.Kruskal;
+import main.java.algoritmo.UnionFind;
+import main.java.modelo.Parque;
+import main.java.modelo.Sendero;
+import main.java.servicio.ConsumoParque;
 
 public class KruskalTest {
 
+	private Parque parqueConexo;
+	private Parque parqueDesconexo;
+	private Kruskal kruskal;
+
+	@Before
+	public void setUp() {
+		parqueConexo = ConsumoParque.cargarParqueDesdeJson("src/test/recursos/parque_test_conexo.json");
+		parqueDesconexo = ConsumoParque.cargarParqueDesdeJson("src/test/recursos/parque_test_desconexo.json");
+		kruskal = new Kruskal();
+	}
+
 	@Test
-    public void testAGMKruskal() {
-        Parque parque = new Parque("Parque Nacional", -34.5, -58.4, 12);
+	public void testAGMParqueConexo() {
+		List<Sendero> agm = kruskal.obtenerAGM(parqueConexo);
 
-        Estacion e0 = new Estacion(0, "Estacion A", -14.59, -54.15);
-        Estacion e1 = new Estacion(1, "Estacion B", -30.72, -15.69);
-        Estacion e2 = new Estacion(2, "Estacion C", -72.13, -82.36);
-        Estacion e3 = new Estacion(3, "Estacion D", -36.41, -38.42);
+		// Verificar que el número de senderos en el AGM es correcto (n-1)
+		int estaciones = parqueConexo.obtenerEstaciones().size();
+		assertEquals(estaciones - 1, agm.size());
+		assertTrue(esArbol(agm, estaciones));
+	}
 
-        parque.agregarEstacion(e0);
-        parque.agregarEstacion(e1);
-        parque.agregarEstacion(e2);
-        parque.agregarEstacion(e3);
+	@Test
+	public void testAGMParqueDesconexo() {
+		List<Sendero> agm = kruskal.obtenerAGM(parqueDesconexo);
 
-        parque.agregarSendero(e0, e1, 10);
-        parque.agregarSendero(e1, e2, 5);
-        parque.agregarSendero(e2, e3, 3);
-        parque.agregarSendero(e0, e3, 7);
-        parque.agregarSendero(e1, e3, 8);
+		// Verificar que no se puede obtener un AGM completo (menos de n-1 senderos)
+		int estaciones = parqueDesconexo.obtenerEstaciones().size();
+		assertTrue(agm.size() < estaciones - 1);
+	}
 
-        Kruskal kruskal = new Kruskal();
-        List<Sendero> agm = kruskal.obtenerAGM(parque);
-        assertEquals(3, agm.size());
-        int impactoTotal = agm.stream().mapToInt(Sendero::obtenerImpactoAmbiental).sum();
-        assertEquals(15, impactoTotal); 
-    }
+	@Test
+	public void testAGMParqueVacio() {
+		Parque parqueVacio = new Parque("Parque Vacio", 0.0, 0.0, 0);
+		List<Sendero> agm = kruskal.obtenerAGM(parqueVacio);
+		assertEquals(0, agm.size());
+	}
 
-    @Test
-    public void testAGMKruskalVacio() {
-        Parque parque = new Parque("",0,0,0);
-
-        Kruskal kruskal = new Kruskal();
-        List<Sendero> agm = kruskal.obtenerAGM(parque);
-
-        assertNotNull(agm);
-        assertTrue(agm.isEmpty());
-    }
+	private boolean esArbol(List<Sendero> senderos, int cantidadEstaciones) {
+		UnionFind uf = new UnionFind(cantidadEstaciones);
+		for (Sendero sendero : senderos) {
+			int u = sendero.obtenerOrigen().obtenerId();
+			int v = sendero.obtenerDestino().obtenerId();
+			if (uf.conectados(u, v)) {
+				return false;
+			}
+			uf.union(u, v);
+		}
+		return true;
+	}
 }

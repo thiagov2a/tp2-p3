@@ -1,10 +1,10 @@
 package main.java.algoritmo;
 
 public class UnionFind {
+
 	private int[] padre;
 	private int[] rango;
 
-	// TODO: Usar Map para no tener problemas con los IDs de las estaciones
 	public UnionFind(int tamaño) {
 		padre = new int[tamaño];
 		rango = new int[tamaño];
@@ -35,8 +35,8 @@ public class UnionFind {
 			}
 		}
 	}
-	public boolean conectados(int p, int q) {
-	    return find(p) == find(q);
-	}
 
+	public boolean conectados(int p, int q) {
+		return find(p) == find(q);
+	}
 }

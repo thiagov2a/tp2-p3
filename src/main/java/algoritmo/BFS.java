@@ -1,13 +1,13 @@
 package main.java.algoritmo;
 
-import main.java.modelo.Estacion;
-import main.java.modelo.Parque;
-import main.java.modelo.Sendero;
-
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Set;
+
+import main.java.modelo.Estacion;
+import main.java.modelo.Parque;
+import main.java.modelo.Sendero;
 
 public class BFS {
 
@@ -43,6 +43,6 @@ public class BFS {
 	}
 
 	private static Estacion obtenerOtroExtremo(Estacion actual, Sendero s) {
-		return s.obtenerEstacionOrigen().equals(actual) ? s.obtenerEstacionDestino() : s.obtenerEstacionOrigen();
+		return s.obtenerOrigen().equals(actual) ? s.obtenerDestino() : s.obtenerOrigen();
 	}
 }

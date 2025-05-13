@@ -1,8 +1,8 @@
 {
   "nombre": "Parque Nacional Los Glaciares",
-  "centroLatitud": -50.4986,
-  "centroLongitud": -73.050,
-  "zoomInicial": 15,
+  "latitud": -50.4986,
+  "longitud": -73.050,
+  "zoom": 15,
   "estaciones": [
     { "id": 0, "nombre": "Centro de Visitantes", "latitud": -50.495, "longitud": -73.050 },
     { "id": 1, "nombre": "Mirador del Glaciar", "latitud": -50.497, "longitud": -73.045 },

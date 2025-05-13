@@ -1,12 +1,12 @@
 package main.java.interfaz;
 
-import main.java.dto.ResultadoAGM;
-import main.java.dto.SenderoDTO;
-
 import java.util.List;
 import java.util.Map;
 
 import org.openstreetmap.gui.jmapviewer.Coordinate;
+
+import main.java.dto.ResultadoAGM;
+import main.java.dto.SenderoDTO;
 
 public interface IVistaControlador {
 
@@ -22,5 +22,5 @@ public interface IVistaControlador {
 
 	Coordinate obtenerCentroParque();
 
-	int obtenerZoomInicial();
+	int obtenerZoom();
 }

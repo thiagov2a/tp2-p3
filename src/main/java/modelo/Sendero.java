@@ -2,9 +2,9 @@ package main.java.modelo;
 
 public class Sendero {
 
-	private final Estacion estacionOrigen;
-	private final Estacion estacionDestino;
-	private final int impactoAmbiental; // Rango del 1-10
+	private Estacion origen;
+	private Estacion destino;
+	private int impactoAmbiental;
 
 	public Sendero(Estacion origen, Estacion destino, int impacto) {
 		if (origen.equals(destino)) {
@@ -15,30 +15,24 @@ public class Sendero {
 			throw new IllegalArgumentException("El impacto ambiental debe estar entre 1 y 10");
 		}
 
-		this.estacionOrigen = origen;
-		this.estacionDestino = destino;
+		this.origen = origen;
+		this.destino = destino;
 		this.impactoAmbiental = impacto;
 	}
 
 	public boolean contieneEstacion(Estacion estacion) {
-		return estacionOrigen.equals(estacion) || estacionDestino.equals(estacion);
+		return origen.equals(estacion) || destino.equals(estacion);
 	}
 
-	public Estacion obtenerEstacionOrigen() {
-		return estacionOrigen;
+	public Estacion obtenerOrigen() {
+		return origen;
 	}
 
-	public Estacion obtenerEstacionDestino() {
-		return estacionDestino;
+	public Estacion obtenerDestino() {
+		return destino;
 	}
 
 	public int obtenerImpactoAmbiental() {
 		return impactoAmbiental;
-	}
-
-	@Override
-	public String toString() {
-		return String.format("%-20s <--> %-20s | Impacto: %d%n", estacionOrigen.obtenerNombre(),
-				estacionDestino.obtenerNombre(), impactoAmbiental);
 	}
 }

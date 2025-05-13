@@ -1,8 +1,8 @@
 {
   "nombre": "Parque Nacional El Palmar",
-  "centroLatitud": -31.860,
-  "centroLongitud": -58.320,
-  "zoomInicial": 14,
+  "latitud": -31.860,
+  "longitud": -58.320,
+  "zoom": 14,
   "estaciones": [
     { "id": 0, "nombre": "Centro de Visitantes", "latitud": -31.850, "longitud": -58.320 },
     { "id": 1, "nombre": "Sendero de los Palmares", "latitud": -31.855, "longitud": -58.325 },

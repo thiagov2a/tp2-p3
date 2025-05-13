@@ -1,7 +1,5 @@
 package main.java.modelo;
 
-import main.java.algoritmo.BFS;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -10,21 +8,23 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import main.java.algoritmo.BFS;
+
 public class Parque {
 
 	private String nombre;
-	private double centroLatitud;
-	private double centroLongitud;
-	private int zoomInicial;
-	private final Set<Estacion> estaciones;
-	private final List<Sendero> senderos;
-	private final Map<Estacion, Set<Sendero>> mapaAdyacencia;
+	private double latitud;
+	private double longitud;
+	private int zoom; // Zoom inicial para la Vista
+	private Set<Estacion> estaciones;
+	private List<Sendero> senderos;
+	private Map<Estacion, Set<Sendero>> mapaAdyacencia;
 
-	public Parque(String nombre, double centroLatitud, double centroLongitud, int zoomInicial) {
+	public Parque(String nombre, double latitud, double longitud, int zoom) {
 		this.nombre = nombre;
-		this.centroLatitud = centroLatitud;
-		this.centroLongitud = centroLongitud;
-		this.zoomInicial = zoomInicial;
+		this.latitud = latitud;
+		this.longitud = longitud;
+		this.zoom = zoom;
 		this.estaciones = new HashSet<>();
 		this.senderos = new ArrayList<>();
 		this.mapaAdyacencia = new HashMap<>();
@@ -56,8 +56,8 @@ public class Parque {
 
 	private boolean existeConexion(Sendero nuevoSendero) {
 		return senderos.stream()
-				.anyMatch(s -> s.obtenerEstacionOrigen() == nuevoSendero.obtenerEstacionOrigen()
-							&& s.obtenerEstacionDestino() == nuevoSendero.obtenerEstacionDestino());
+				.anyMatch(s -> s.obtenerOrigen() == nuevoSendero.obtenerOrigen()
+							&& s.obtenerDestino() == nuevoSendero.obtenerDestino());
 	}
 
 	public boolean contieneEstacion(Estacion estacion) {
@@ -83,32 +83,35 @@ public class Parque {
 			throw new IllegalArgumentException("El sendero no existe en el mapa");
 		}
 
-		mapaAdyacencia.get(sendero.obtenerEstacionOrigen()).remove(sendero);
-		mapaAdyacencia.get(sendero.obtenerEstacionDestino()).remove(sendero);
+		mapaAdyacencia.get(sendero.obtenerOrigen()).remove(sendero);
+		mapaAdyacencia.get(sendero.obtenerDestino()).remove(sendero);
 	}
 
-	public double obtenerCentroLatitud() {
-		return centroLatitud;
+	public double obtenerLatitud() {
+		return latitud;
 	}
 
-	public double obtenerCentroLongitud() {
-		return centroLongitud;
+	public double obtenerLongitud() {
+		return longitud;
 	}
 
-	public int obtenerZoomInicial() {
-		return zoomInicial;
+	public int obtenerZoom() {
+		return zoom;
 	}
 
+	// Devuelve un Set inmutable de estaciones.
 	public Set<Estacion> obtenerEstaciones() {
-		return Collections.unmodifiableSet(estaciones);
+	    return Collections.unmodifiableSet(estaciones);
 	}
 
+	// Devuelve una List inmutable de senderos.
 	public List<Sendero> obtenerSenderos() {
-		return Collections.unmodifiableList(senderos);
+	    return Collections.unmodifiableList(senderos);
 	}
 
+	// Devuelve un Set inmutable de senderos desde una estación. Si no hay, devuelve vacío.
 	public Set<Sendero> obtenerSenderosDesde(Estacion estacion) {
-		return Collections.unmodifiableSet(mapaAdyacencia.getOrDefault(estacion, new HashSet<>()));
+	    return Collections.unmodifiableSet(mapaAdyacencia.getOrDefault(estacion, new HashSet<>()));
 	}
 
 	public boolean esConexo() {

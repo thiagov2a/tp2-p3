@@ -1,8 +1,8 @@
 {
   "nombre": "Parque Nacional Talampaya",
-  "centroLatitud": -29.800,
-  "centroLongitud": -67.800,
-  "zoomInicial": 14,
+  "latitud": -29.800,
+  "longitud": -67.800,
+  "zoom": 14,
   "estaciones": [
     { "id": 0, "nombre": "Centro de Interpretación", "latitud": -29.790, "longitud": -67.800 },
     { "id": 1, "nombre": "Cañón de Talampaya", "latitud": -29.795, "longitud": -67.805 },

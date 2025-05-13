@@ -1,8 +1,8 @@
 {
   "nombre": "Parque Nacional Iguazú",
-  "centroLatitud": -25.6900,
-  "centroLongitud": -54.4354,
-  "zoomInicial": 15,
+  "latitud": -25.6900,
+  "longitud": -54.4354,
+  "zoom": 15,
   "estaciones": [
     { "id": 0, "nombre": "Centro de Visitantes", "latitud": -25.685, "longitud": -54.436 },
     { "id": 1, "nombre": "Sendero Macuco", "latitud": -25.687, "longitud": -54.432 },

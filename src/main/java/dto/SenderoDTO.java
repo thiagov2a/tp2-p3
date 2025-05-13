@@ -4,9 +4,9 @@ import org.openstreetmap.gui.jmapviewer.Coordinate;
 
 public class SenderoDTO {
 
-	private final Coordinate origen;
-	private final Coordinate destino;
-	private final int impactoAmbiental;
+	private Coordinate origen;
+	private Coordinate destino;
+	private int impactoAmbiental;
 
 	public SenderoDTO(Coordinate origen, Coordinate destino, int impactoAmbiental) {
 		this.origen = origen;

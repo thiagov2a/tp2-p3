@@ -1,12 +1,12 @@
 package main.java.algoritmo;
 
-import main.java.modelo.Sendero;
-import main.java.interfaz.AlgoritmoAGM;
-import main.java.modelo.Parque;
-
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+
+import main.java.interfaz.AlgoritmoAGM;
+import main.java.modelo.Parque;
+import main.java.modelo.Sendero;
 
 public class Kruskal implements AlgoritmoAGM {
 
@@ -24,8 +24,8 @@ public class Kruskal implements AlgoritmoAGM {
 		UnionFind uf = new UnionFind(parque.obtenerEstaciones().size());
 
 		for (Sendero sendero : senderos) {
-			int origen = sendero.obtenerEstacionOrigen().obtenerId();
-			int destino = sendero.obtenerEstacionDestino().obtenerId();
+			int origen = sendero.obtenerOrigen().obtenerId();
+			int destino = sendero.obtenerDestino().obtenerId();
 
 			if (uf.find(origen) != uf.find(destino)) {
 				uf.union(origen, destino);

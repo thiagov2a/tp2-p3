@@ -1,13 +1,15 @@
 package main.java.servicio;
 
-import main.java.modelo.Estacion;
-import main.java.modelo.Parque;
 import java.io.FileReader;
 import java.util.HashMap;
 import java.util.Map;
+
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+
+import main.java.modelo.Estacion;
+import main.java.modelo.Parque;
 
 public class ConsumoParque {
 
@@ -28,10 +30,10 @@ public class ConsumoParque {
 
 	private static Parque construirParque(JsonObject json) {
 		String nombre = json.get("nombre").getAsString();
-		double centroLatitud = json.get("centroLatitud").getAsDouble();
-		double centroLongitud = json.get("centroLongitud").getAsDouble();
-		int zoomInicial = json.get("zoomInicial").getAsInt();
-		return new Parque(nombre, centroLatitud, centroLongitud, zoomInicial);
+		double latitud = json.get("latitud").getAsDouble();
+		double longitud = json.get("longitud").getAsDouble();
+		int zoom = json.get("zoom").getAsInt();
+		return new Parque(nombre, latitud, longitud, zoom);
 	}
 
 	private static Map<Integer, Estacion> cargarEstaciones(JsonArray estacionesJson, Parque parque) {

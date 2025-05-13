@@ -1,28 +1,34 @@
 package main.java.vista;
 
-import main.java.algoritmo.Kruskal;
-import main.java.algoritmo.Prim;
-import main.java.controlador.ControladorParque;
-import main.java.dto.SenderoDTO;
-import main.java.interfaz.AlgoritmoAGM;
-import main.java.dto.ResultadoAGM;
-
-import javax.swing.*;
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.FlowLayout;
 import java.util.List;
 import java.util.Map;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 
 import org.openstreetmap.gui.jmapviewer.Coordinate;
 import org.openstreetmap.gui.jmapviewer.JMapViewer;
 import org.openstreetmap.gui.jmapviewer.MapMarkerDot;
 import org.openstreetmap.gui.jmapviewer.MapPolygonImpl;
 
+import main.java.algoritmo.Kruskal;
+import main.java.algoritmo.Prim;
+import main.java.controlador.ServicioParque;
+import main.java.dto.ResultadoAGM;
+import main.java.dto.SenderoDTO;
+import main.java.interfaz.AlgoritmoAGM;
+
 public class VistaParque {
 
 	private JFrame frame;
 	private JMapViewer mapa;
 	private JPanel panelMapa;
-	private ControladorParque controlador;
+	private ServicioParque controlador;
 
 	public VistaParque() {
 		String[] opciones = { "Parque El Palmar", "Parque Glaciares", "Parque Iguazú", "Parque Talampaya" };
@@ -34,15 +40,15 @@ public class VistaParque {
 		}
 
 		String rutaJson = seleccionParque(seleccion);
-		this.controlador = new ControladorParque(rutaJson);
+		this.controlador = new ServicioParque(rutaJson);
 	}
 
 	private String seleccionParque(String seleccion) {
 		return switch (seleccion) {
-			case "Parque El Palmar" -> "src/main/recursos/parque_el_palmar.json";
-			case "Parque Glaciares" -> "src/main/recursos/parque_glaciares.json";
-			case "Parque Iguazú" -> "src/main/recursos/parque_iguazu.json";
-			default -> "src/main/recursos/parque_talampaya.json";
+		case "Parque El Palmar" -> "src/main/recursos/parque_el_palmar.json";
+		case "Parque Glaciares" -> "src/main/recursos/parque_glaciares.json";
+		case "Parque Iguazú" -> "src/main/recursos/parque_iguazu.json";
+		default -> "src/main/recursos/parque_talampaya.json";
 		};
 	}
 
@@ -54,7 +60,7 @@ public class VistaParque {
 
 	private void inicializar() {
 		Coordinate centroParque = controlador.obtenerCentroParque();
-		int zoomInicial = controlador.obtenerZoomInicial();
+		int zoomInicial = controlador.obtenerZoom();
 
 		frame = new JFrame("Parque Nacional");
 		frame.setSize(800, 600);
@@ -82,22 +88,17 @@ public class VistaParque {
 			}
 
 			String[] opcionesAlg = { "Prim", "Kruskal" };
-			String algoritmo = (String) JOptionPane.showInputDialog(frame, "Seleccione el algoritmo",
-					"Algoritmo AGM", JOptionPane.QUESTION_MESSAGE, null, opcionesAlg, opcionesAlg[0]);
+			String algoritmo = (String) JOptionPane.showInputDialog(frame, "Seleccione el algoritmo", "Algoritmo AGM",
+					JOptionPane.QUESTION_MESSAGE, null, opcionesAlg, opcionesAlg[0]);
 
 			if (algoritmo != null) {
-			    AlgoritmoAGM algoritmoAGM;
+				AlgoritmoAGM algoritmoAGM = algoritmo.equals("Prim") ? new Prim() : new Kruskal();
 
-			    if (algoritmo.equals("Prim")) {
-			        algoritmoAGM = new Prim();
-			    } else {
-			        algoritmoAGM = new Kruskal();
-			    }
-
-			    ResultadoAGM resultado = controlador.obtenerAGM(algoritmoAGM);
+				ResultadoAGM resultado = controlador.obtenerAGM(algoritmoAGM);
 				dibujarSenderosDestacados(resultado.obtenerSenderos());
-				JOptionPane.showMessageDialog(frame,
-						"Impacto total: " + resultado.obtenerImpactoTotal() + "\nTiempo de ejecución: " + resultado.obtenerTiempoEjecucion() + " ms");
+
+				JOptionPane.showMessageDialog(frame, "Impacto total: " + resultado.obtenerImpactoTotal()
+						+ "\nTiempo de ejecución: " + resultado.obtenerTiempoEjecucion() + " ms");
 			}
 		});
 
@@ -121,7 +122,8 @@ public class VistaParque {
 		}
 
 		for (SenderoDTO s : controlador.obtenerSenderos()) {
-			MapPolygonImpl linea = new MapPolygonImpl(List.of(s.obtenerOrigen(), s.obtenerDestino(), s.obtenerOrigen()));
+			MapPolygonImpl linea = new MapPolygonImpl(
+					List.of(s.obtenerOrigen(), s.obtenerDestino(), s.obtenerOrigen()));
 			linea.setColor(colorPorImpacto(s.obtenerImpactoAmbiental()));
 			mapa.addMapPolygon(linea);
 		}
@@ -129,17 +131,18 @@ public class VistaParque {
 
 	private void dibujarSenderosDestacados(List<SenderoDTO> senderos) {
 		limpiarMapa();
-		
+
 		for (SenderoDTO s : senderos) {
-			MapPolygonImpl linea = new MapPolygonImpl(List.of(s.obtenerOrigen(), s.obtenerDestino(), s.obtenerOrigen()));
+			MapPolygonImpl linea = new MapPolygonImpl(
+					List.of(s.obtenerOrigen(), s.obtenerDestino(), s.obtenerOrigen()));
 			linea.setColor(colorPorImpacto(s.obtenerImpactoAmbiental()));
 			mapa.addMapPolygon(linea);
 		}
 	}
-	
+
 	private void limpiarMapa() {
-	    mapa.removeAllMapPolygons();
-	    // mapa.removeAllMapMarkers();
+		mapa.removeAllMapPolygons();
+		// mapa.removeAllMapMarkers();
 	}
 
 	private Color colorPorImpacto(int impacto) {

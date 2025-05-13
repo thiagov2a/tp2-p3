@@ -1,0 +1,14 @@
+{
+  "nombre": "Parque de Prueba Desconexo",
+  "latitud": -34.000,
+  "longitud": -58.000,
+  "zoom": 13,
+  "estaciones": [
+    { "id": 0, "nombre": "Estación A", "latitud": -34.001, "longitud": -58.001 },
+    { "id": 1, "nombre": "Estación B", "latitud": -34.002, "longitud": -58.002 },
+    { "id": 2, "nombre": "Estación C", "latitud": -34.003, "longitud": -58.003 }
+  ],
+  "senderos": [
+    { "origen": 0, "destino": 1, "impacto": 2 }
+  ]
+}

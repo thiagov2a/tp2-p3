@@ -8,5 +8,4 @@ import main.java.modelo.Parque;
 public interface AlgoritmoAGM {
 
 	List<Sendero> obtenerAGM(Parque parque);
-
 }
