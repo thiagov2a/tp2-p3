@@ -9,12 +9,13 @@ import main.java.dto.ResultadoAGM;
 import main.java.dto.SenderoDTO;
 import main.java.interfaz.AlgoritmoAGM;
 import main.java.interfaz.IVistaControlador;
+import main.java.servicio.ServicioParque;
 
-public class ServicioParque implements IVistaControlador {
+public class ControladorParque implements IVistaControlador {
 
 	private ServicioParque servicioParque;
 
-	public ServicioParque(String rutaJson) {
+	public ControladorParque(String rutaJson) {
 		this.servicioParque = new ServicioParque(rutaJson);
 	}
 
