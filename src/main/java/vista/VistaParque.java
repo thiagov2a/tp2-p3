@@ -24,7 +24,7 @@ import main.java.algoritmo.Prim;
 import main.java.controlador.ControladorParque;
 import main.java.dto.ResultadoAGM;
 import main.java.dto.SenderoDTO;
-import main.java.interfaz.AlgoritmoAGM;
+import main.java.interfaz.IAlgoritmoAGM;
 
 public class VistaParque {
 
@@ -117,7 +117,7 @@ public class VistaParque {
 				JOptionPane.QUESTION_MESSAGE, null, opcionesAlg, opcionesAlg[0]);
 
 		if (algoritmo != null) {
-			AlgoritmoAGM algoritmoAGM = algoritmo.equals("Prim") ? new Prim() : new Kruskal();
+			IAlgoritmoAGM algoritmoAGM = algoritmo.equals("Prim") ? new Prim() : new Kruskal();
 			ResultadoAGM resultado = controlador.obtenerAGM(algoritmoAGM);
 
 			dibujarSenderosDestacados(resultado.obtenerSenderos());

@@ -10,7 +10,7 @@ import org.openstreetmap.gui.jmapviewer.Coordinate;
 
 import main.java.dto.ResultadoAGM;
 import main.java.dto.SenderoDTO;
-import main.java.interfaz.AlgoritmoAGM;
+import main.java.interfaz.IAlgoritmoAGM;
 import main.java.modelo.Estacion;
 import main.java.modelo.Parque;
 import main.java.modelo.Sendero;
@@ -53,7 +53,7 @@ public class ServicioParque {
 				.collect(Collectors.toList());
 	}
 
-	public ResultadoAGM obtenerAGM(AlgoritmoAGM algoritmo) {
+	public ResultadoAGM obtenerAGM(IAlgoritmoAGM algoritmo) {
 		Map<Integer, Coordinate> coords = obtenerCoordenadasEstaciones();
 
 		long inicio = System.nanoTime();

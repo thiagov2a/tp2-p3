@@ -4,11 +4,11 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-import main.java.interfaz.AlgoritmoAGM;
+import main.java.interfaz.IAlgoritmoAGM;
 import main.java.modelo.Parque;
 import main.java.modelo.Sendero;
 
-public class Kruskal implements AlgoritmoAGM {
+public class Kruskal implements IAlgoritmoAGM {
 
 	@Override
 	public List<Sendero> obtenerAGM(Parque parque) {

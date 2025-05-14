@@ -7,12 +7,12 @@ import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Set;
 
-import main.java.interfaz.AlgoritmoAGM;
+import main.java.interfaz.IAlgoritmoAGM;
 import main.java.modelo.Estacion;
 import main.java.modelo.Parque;
 import main.java.modelo.Sendero;
 
-public class Prim implements AlgoritmoAGM {
+public class Prim implements IAlgoritmoAGM {
 
 	@Override
 	public List<Sendero> obtenerAGM(Parque parque) {

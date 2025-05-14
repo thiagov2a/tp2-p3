@@ -13,7 +13,7 @@ import org.openstreetmap.gui.jmapviewer.Coordinate;
 
 import main.java.dto.ResultadoAGM;
 import main.java.dto.SenderoDTO;
-import main.java.interfaz.AlgoritmoAGM;
+import main.java.interfaz.IAlgoritmoAGM;
 import main.java.modelo.Sendero;
 import main.java.servicio.ServicioParque;
 
@@ -78,7 +78,7 @@ public class ServicioParqueTest {
 
 	@Test
 	public void testObtenerAGMConAlgoritmoMock() {
-		AlgoritmoAGM algoritmoMock = new AlgoritmoAGM() {
+		IAlgoritmoAGM algoritmoMock = new IAlgoritmoAGM() {
 			@Override
 			public List<Sendero> obtenerAGM(main.java.modelo.Parque parque) {
 				return parque.obtenerSenderos().subList(0, 1);

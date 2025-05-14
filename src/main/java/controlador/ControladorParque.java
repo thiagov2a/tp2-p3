@@ -7,7 +7,7 @@ import org.openstreetmap.gui.jmapviewer.Coordinate;
 
 import main.java.dto.ResultadoAGM;
 import main.java.dto.SenderoDTO;
-import main.java.interfaz.AlgoritmoAGM;
+import main.java.interfaz.IAlgoritmoAGM;
 import main.java.interfaz.IVistaControlador;
 import main.java.servicio.ServicioParque;
 
@@ -35,7 +35,7 @@ public class ControladorParque implements IVistaControlador {
 	}
 
 	@Override
-	public ResultadoAGM obtenerAGM(AlgoritmoAGM algoritmo) {
+	public ResultadoAGM obtenerAGM(IAlgoritmoAGM algoritmo) {
 		return servicioParque.obtenerAGM(algoritmo);
 	}
 

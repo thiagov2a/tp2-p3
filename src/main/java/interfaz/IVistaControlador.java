@@ -16,7 +16,7 @@ public interface IVistaControlador {
 
 	List<SenderoDTO> obtenerSenderos();
 
-	ResultadoAGM obtenerAGM(AlgoritmoAGM algoritmo);
+	ResultadoAGM obtenerAGM(IAlgoritmoAGM algoritmo);
 
 	boolean verificarConectividad();
 
