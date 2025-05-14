@@ -44,16 +44,16 @@ Desarrollo de una aplicación visual que calcula la red óptima de senderos en u
 
 #### **Opcionales**  
 - Comparar tiempos de ejecución Kruskal vs Prim.
-- Codificación por colores según impacto ambiental (rojo=alto, verde=bajo).
-- Persistencia de datos en archivos JSON/XML.
+- Codificación por colores según impacto ambiental.
+- Persistencia de datos en archivos JSON.
 
 ---
 
 ### 🛠 Herramientas y Tecnologías
-| Componente          | Tecnología                          |
+| Componente          | Tecnología                         |
 |---------------------|------------------------------------|
-| Lenguaje            | Java 11+                           |
-| Bibliotecas         | JGraphT (grafos), JMapViewer (mapas) |
+| Lenguaje            | Java 21                            |
+| Bibliotecas         | Gson (archivos), JMapViewer (mapas)|
 | IDE                 | Eclipse con WindowBuilder          |
 | Control de Versiones| Git/GitHub                         |
 | Testing             | JUnit 5 + EclEmma (cobertura)      |
@@ -64,8 +64,11 @@ Desarrollo de una aplicación visual que calcula la red óptima de senderos en u
 ```bash
 src/
 ├── main/
-│   ├── model/          # Clases de dominio
-│   ├── algorithm/      # Kruskal/Prim
-│   ├── ui/             # Interfaz gráfica
-│   └── utils/          # Utilidades (FileLoader)
+│   ├── algoritmo/      # Kruskal/Prim
+│   ├── controlador/    # Intermediario
+│   ├── dto/            # Objeto de Transferencia de Datos
+│   ├── interfaz/       # Polimorfismo
+│   ├── modelo/         # Estructura del Grafo
+│   ├── servicio/       # Lógica sobre el Grafo 
+│   └── vista/          # U/I
 └── test/               # Tests unitarios
