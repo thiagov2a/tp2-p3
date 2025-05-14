@@ -15,7 +15,7 @@ public class Parque {
 	private String nombre;
 	private double latitud;
 	private double longitud;
-	private int zoom; // Zoom inicial para la Vista
+	private int zoom;	// Zoom inicial para la Vista
 	private Set<Estacion> estaciones;
 	private List<Sendero> senderos;
 	private Map<Estacion, Set<Sendero>> mapaAdyacencia;
@@ -69,11 +69,9 @@ public class Parque {
 			throw new IllegalArgumentException("La estación no existe en el mapa");
 		}
 
-		// Eliminar todos los senderos conectados
 		Set<Sendero> senderosAEliminar = new HashSet<>(mapaAdyacencia.get(estacion));
 		senderos.removeAll(senderosAEliminar);
 
-		// Actualizar mapa de adyacencia
 		mapaAdyacencia.remove(estacion);
 		mapaAdyacencia.values().forEach(s -> s.removeAll(senderosAEliminar));
 	}
@@ -99,17 +97,17 @@ public class Parque {
 		return zoom;
 	}
 
-	// Devuelve un Set inmutable de estaciones.
+	// Devuelve un Set inmutable de estaciones
 	public Set<Estacion> obtenerEstaciones() {
 	    return Collections.unmodifiableSet(estaciones);
 	}
 
-	// Devuelve una List inmutable de senderos.
+	// Devuelve una List inmutable de senderos
 	public List<Sendero> obtenerSenderos() {
 	    return Collections.unmodifiableList(senderos);
 	}
 
-	// Devuelve un Set inmutable de senderos desde una estación. Si no hay, devuelve vacío.
+	// Devuelve un Set inmutable de senderos desde una estación. Si no hay, devuelve vacío
 	public Set<Sendero> obtenerSenderosDesde(Estacion estacion) {
 	    return Collections.unmodifiableSet(mapaAdyacencia.getOrDefault(estacion, new HashSet<>()));
 	}
